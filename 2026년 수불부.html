@@ -245,6 +245,10 @@ function withLabelRoom(options, opts){
       <div style="color:var(--muted); font-size:11px">회전일수 <strong id="digTurn" style="color:var(--text); font-size:13px; font-weight:600" title="중앙값 / Trimmed 평균(상하 10% 제외)">—</strong></div>
       <div style="color:var(--line)">·</div>
       <div style="color:var(--muted); font-size:11px">자본묶임 <strong id="digTiedUp" style="color:var(--magenta); font-size:13px; font-weight:600" title="과잉재고(회전 180일+)에 묶인 1년치 환산 자본">—</strong></div>
+      <div style="color:var(--line)">·</div>
+      <div style="color:var(--muted); font-size:11px">평균이익율 <strong id="digMargin" style="color:var(--green); font-size:13px; font-weight:600" title="원가율 시트 기반 코드별 평균 이익율">—</strong></div>
+      <div style="color:var(--line)">·</div>
+      <div style="color:var(--muted); font-size:11px">적자 <strong id="digLoss" style="color:var(--magenta); font-size:13px; font-weight:600" title="이익율 마이너스인 코드 수">—</strong></div>
       <div style="margin-left:auto; font-size:11px; color:var(--muted); display:flex; align-items:center; gap:6px">
         <span id="digSyncDot" style="width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block"></span>
         <span id="digSyncTime">—</span>
@@ -372,7 +376,7 @@ function withLabelRoom(options, opts){
         <strong>의미:</strong> 단순 우선순위 점수가 아니라, <strong>"이 재고를 정리하지 않으면 매년 묶이는 자본 환산값"</strong>. 회계적으로 <strong>기회비용(자본의 시간가치)</strong> 개념.
       </div>
     </div>
-    <div class="panel"><h3>💰 자본 묶임 TOP <span style="font-size:11px; color:var(--muted); font-weight:400">— 행 클릭 시 옵션 드릴다운</span></h3><div class="ph-sub">실제 재고금액과 회전일수를 함께 표시 — 자본묶임은 그 둘을 곱한 1년치 환산값. 액션 우선순위는 자본묶임 큰 순</div><div id="tiedUpSummary" style="margin-bottom:8px"></div><table id="tiedUpTable"><thead><tr><th>#</th><th>코드</th><th>품목</th><th class="num">재고금액</th><th class="num">회전기간</th><th class="num">상태</th><th class="num">자본묶임 (1년 환산)</th><th></th></tr></thead><tbody></tbody></table></div>
+    <div class="panel"><h3>💰 자본 묶임 TOP <span style="font-size:11px; color:var(--muted); font-weight:400">— 행 클릭 시 옵션 드릴다운</span></h3><div class="ph-sub">실제 재고금액 + 회전일수 + <strong>이익율</strong>. 적자 코드의 묶임은 "실제 손실 추정"으로 환산 (자본묶임 × |음수 이익율|)</div><div id="tiedUpSummary" style="margin-bottom:8px"></div><table id="tiedUpTable"><thead><tr><th>#</th><th>코드</th><th>품목</th><th class="num">재고금액</th><th class="num">회전기간</th><th class="num">상태</th><th class="num">이익율</th><th class="num">자본묶임</th><th class="num">실제 손실</th><th></th></tr></thead><tbody></tbody></table></div>
     <div class="row2">
       <div class="panel"><h3>📦 과잉재고 (Excess Inventory)</h3><div class="ph-sub">카테고리별 정상 회전 기준 초과 코드 — 행 클릭 시 옵션 드릴다운</div><div id="excessSummary" style="margin-bottom:8px"></div><table id="excessTable"><thead><tr><th>코드</th><th>품목</th><th>카테고리</th><th class="num">재고</th><th class="num">회전</th><th class="num">상태</th></tr></thead><tbody></tbody></table></div>
       <div class="panel"><h3>⚡ 품절 위험 · 재입고 시급</h3><div class="ph-sub">카테고리 정상 회전보다 빠르게 빠지는 코드</div><div id="stockoutSummary" style="margin-bottom:8px"></div><table id="stockoutTable"><thead><tr><th>코드</th><th>품목</th><th>카테고리</th><th class="num">재고</th><th class="num">회전</th><th class="num">소진예측</th></tr></thead><tbody></tbody></table></div>
@@ -405,8 +409,8 @@ function withLabelRoom(options, opts){
         <div><h4 style="margin:0 0 6px; font-size:12px; color:var(--muted)">블록(재고 유형) 별 당월 요약</h4><table><thead><tr><th>블록</th><th class="num">기말 수량</th><th class="num">기말 금액</th></tr></thead><tbody id="tabBlocksBody"></tbody></table></div>
       </div>
       <div style="height:14px"></div>
-      <h4 style="margin:0 0 6px; font-size:12px; color:var(--muted)">옵션 단위 상세 (선택 월) — 기초 / 입고 / 판매 / 위탁 / 손실 / 기말 / 소진예측</h4>
-      <table class="opt-table" id="optTable"><thead><tr><th style="min-width:200px">옵션</th><th class="num">기초</th><th class="num">+입고</th><th class="num">−판매</th><th class="num">−위탁</th><th class="num">−손실</th><th class="num">기말 수량</th><th class="num">기말 금액</th><th class="num">소진 예측<br/><span style="font-size:9px; color:var(--muted); font-weight:400">최근 3개월</span></th></tr></thead><tbody></tbody></table>
+      <h4 style="margin:0 0 6px; font-size:12px; color:var(--muted)">옵션 단위 상세 (선택 월) — 기초 / 입고 / 판매 / 위탁 / 손실 / 기말 / 단가 / 소진예측</h4>
+      <table class="opt-table" id="optTable"><thead><tr><th style="min-width:200px">옵션</th><th class="num">기초</th><th class="num">+입고</th><th class="num">−판매</th><th class="num">−위탁</th><th class="num">−손실</th><th class="num">기말 수량</th><th class="num">기말 금액</th><th class="num">취득원가<br/><span style="font-size:9px; color:var(--muted); font-weight:400">최근 입고월</span></th><th class="num">소진 예측<br/><span style="font-size:9px; color:var(--muted); font-weight:400">최근 3개월</span></th></tr></thead><tbody></tbody></table>
     </div>
   </div>
   <div id="view-gijun" style="display:none">
@@ -415,6 +419,10 @@ function withLabelRoom(options, opts){
   
   <!-- ============== 재고 ============== -->
   <div id="view-stock" style="display:none">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; padding:10px 14px; background:var(--card); border:1px solid var(--line); border-radius:8px">
+      <div style="font-size:12px; color:var(--muted)">📋 재고 데이터는 구글시트 "재고" 탭의 status (품절 여부) 컬럼을 기준으로 표시됩니다. 시트 수정 후 아래 버튼 클릭하면 즉시 반영.</div>
+      <button id="stkSyncBtn" onclick="syncStockNow()" class="btn" style="background:#3a6df0">🔄 시트에서 재고 동기화</button>
+    </div>
     <div class="grid cards4">
       <div class="card"><h4>총 SKU 수</h4><div class="v" id="stkTotalSku">—</div><div class="sub" id="stkTotalSkuSub">기종/색상 단위</div></div>
       <div class="card"><h4>총 재고 수량</h4><div class="v" id="stkTotalQty">—</div><div class="sub">개</div></div>
@@ -518,6 +526,212 @@ function applyDrilldownFilter(type, value){
   if (typeof renderGijun === 'function') renderGijun();
 }
 function clearDrilldownFilter(){ applyDrilldownFilter(null, null); }
+// ========== 코드-옵션 매칭 진단 (콘솔에서 diagCodeMatch() 호출) ==========
+function diagCodeMatch(){
+  console.log('========== 🔍 코드별 옵션 매칭 진단 ==========');
+  console.log('각 코드의 첫 옵션 이름이 코드와 일치하는지 확인하세요.');
+  console.log('예: MH면 "Magsafe Case Air" 관련 옵션이 나와야 정상');
+  console.log('');
+  const order = ['DW','PH','MB','MH','FB-I','FB-G','FBB','FH','FS','FC','MX','SC','TG','FT','MS','MA'];
+  const result = [];
+  for (const code of order){
+    const tab = DATA.tabs[code];
+    if (!tab){ console.warn(`${code}: ❌ 탭 데이터 없음`); continue; }
+    const blockTypes = (tab.blocks||[]).map(b => b.type);
+    const firstOpts = [];
+    for (const b of (tab.blocks||[])){
+      for (const o of (b.options||[]).slice(0,2)){
+        firstOpts.push(`[${b.type}] ${o.n}`);
+      }
+    }
+    const meta = LOOKUP[code];
+    const item = meta ? meta.item : '?';
+    const summary = `${code} (${item}) [블록: ${blockTypes.join('+')}] → ${firstOpts.slice(0,3).join(' | ') || '옵션 없음'}`;
+    console.log(summary);
+    result.push({ code, item, blocks: blockTypes, firstOpts });
+  }
+  console.log('');
+  console.log('========== 시트(sheets) 키 vs DATA.tabs 키 확인 ==========');
+  if (typeof window._lastFetchedSheets !== 'undefined'){
+    console.log('마지막 fetch sheets keys:', Object.keys(window._lastFetchedSheets));
+  } else {
+    console.log('마지막 fetch sheets 정보 없음 (refreshAllAuto 후 다시 실행해보세요)');
+  }
+  return result;
+}
+// ========== 재고 시트만 빠르게 동기화 (재고 탭 새로고침 버튼) ==========
+async function syncStockNow(){
+  const btn = document.getElementById('stkSyncBtn');
+  const originalText = btn ? btn.textContent : '';
+  if (btn){ btn.disabled = true; btn.textContent = '⏳ 동기화 중…'; btn.style.background = '#f59e0b'; }
+  try {
+    if (typeof fetchSheetGviz !== 'function' || typeof gvizToRows !== 'function' || typeof buildInventoryFromXlsx !== 'function'){
+      throw new Error('동기화 함수가 준비되지 않음');
+    }
+    const data = await fetchSheetGviz('재고');
+    const rows = gvizToRows(data);
+    if (!rows || rows.length < 2) throw new Error('재고 시트가 비어있음');
+    const newInv = buildInventoryFromXlsx({ '재고': rows });
+    if (!newInv.length) throw new Error('INVENTORY 파싱 실패 (시트 컬럼 구조 확인)');
+    // INVENTORY 전역 변수를 직접 교체 — 재할당이 막혀있으면 splice
+    try {
+      INVENTORY.length = 0;
+      for (const r of newInv) INVENTORY.push(r);
+    } catch(e){
+      // 위가 실패하면 전역 재할당 시도
+      window.INVENTORY = newInv;
+    }
+    // 화면 재렌더
+    if (typeof renderStock === 'function') renderStock();
+    setSyncTime && setSyncTime();
+    console.log(`[STOCK SYNC] ✅ 재고 ${newInv.length}건 시트에서 즉시 동기화 완료`);
+    // 폐기/품절 상태 분포 콘솔 출력 (검증용)
+    const statusCounts = {};
+    for (const r of newInv){
+      const s = stockStatusOf(r);
+      statusCounts[s] = (statusCounts[s]||0) + 1;
+    }
+    console.log('[STOCK SYNC] 상태 분포:', statusCounts);
+    if (btn){
+      btn.textContent = `✅ 완료 · ${newInv.length}건 · 폐기 ${statusCounts['폐기']||0}개`;
+      btn.style.background = '#10b981';
+      setTimeout(() => {
+        btn.disabled = false; btn.textContent = originalText; btn.style.background = '#3a6df0';
+      }, 4000);
+    }
+  } catch(e){
+    console.error('[STOCK SYNC] ❌ 실패:', e.message);
+    if (btn){
+      btn.textContent = '❌ 동기화 실패 (콘솔 확인)';
+      btn.style.background = '#dc2626';
+      setTimeout(() => {
+        btn.disabled = false; btn.textContent = originalText; btn.style.background = '#3a6df0';
+      }, 5000);
+    }
+    alert('재고 동기화 실패: ' + e.message + '\n\n원인 가능성:\n1) 시트 "재고" 탭이 비공개 (공유 권한 확인)\n2) 시트 컬럼 구조 변경 ("제품" 헤더 위치)\n3) 네트워크 차단');
+  }
+}
+// ========== 원가율/이익율 데이터 (PROFIT) ==========
+// 시트명 "원가율"에서 fetch. CORS 차단된 환경(file://)에서는 인라인 fallback 사용.
+// 한 코드에 여러 제품 변형이 있을 수 있어 그룹핑.
+// 인라인 fallback — 사용자가 시트에 입력한 데이터 (2026-05-19 기준 스냅샷)
+// 시트 업데이트 후 라이브 fetch 가능한 환경(http/https)에서는 이게 덮어써짐.
+const PROFIT_FALLBACK_RAWS = [
+  // [name, code, sosobiga, cost, costPct, profitPct, profit, avgPrice]
+  ['맥세이프케이스 에어', 'MH', 13900, 6337, 45.59, 0.31, 43, 22544],
+  ['맥세이프케이스 범퍼', 'MB', 13900, 7241, 52.09, -6.19, -861, 20739],
+  ['프레임케이스 범퍼', 'FB-I', 9900, 3191, 32.23, 13.67, 1353, 14690],
+  ['프레임케이스 범퍼 갤럭시', 'FB-G', 9900, 2400, 24.24, 21.66, 2144, 13865],
+  ['프레임케이스 에어', 'FH', 9900, 2820, 28.48, 17.42, 1724, 13396],
+  ['스탠드케이스', 'SC', 3900, 2919, 74.85, -28.95, -1129, 7469],
+  ['액정보호필름', 'TG', 15000, 1500, 10.00, 35.90, 5385, 8564],
+  ['베이직 케이스', 'FBB', 11700, 2888, 24.68, 21.22, 2482, 10727],
+  ['DW STAND BASIC', 'DW', 22000, 12442, 56.56, -10.66, -2344, 29003],
+  ['DW STAND PLUS', 'DW', 69000, 21396, 31.01, 14.89, 10275, 57551],
+  ['DW STAND PRO', 'DW', 99000, 30446, 30.75, 15.15, 14995, 81615],
+  ['MAGSAFE FRAME', 'MA', 25000, 5959, 23.84, 22.06, 5516, 25000],
+  ['MAGSAFE KICK FRAME', 'MA', 29800, 6977, 23.41, 22.49, 6701, 28387],
+  ['MAGSAFE ARC TOK', 'MA', 33000, 18069, 54.75, -8.85, -2922, 18684],
+  ['MAGSAFE GRIP', 'MA', 39500, 8586, 21.74, 24.16, 9545, 21612],
+  ['PH STAND', 'PH', 39500, 9835, 24.90, 21.00, 8295, 31512],
+  ['FRAME TIP SHORT', 'FT', 3100, 1565, 50.48, -4.58, -142, 3443],
+  ['FRAME TIP LONG', 'FT', 3100, 1565, 50.48, -4.58, -142, 3443]
+];
+function buildProfitFromRaws(raws){
+  const out = {};
+  for (const [name, code, sosobiga, cost, costPct, profitPct, profit, avgPrice] of raws){
+    if (!out[code]) out[code] = { items: [], avgProfitPct: 0, minProfitPct: Infinity, maxProfitPct: -Infinity, avgCostPct: 0, isLoss: false, hasLoss: false };
+    out[code].items.push({ name, costPct, profitPct, profit, avgPrice, sosobiga, cost });
+  }
+  for (const code in out){
+    const items = out[code].items;
+    let sumProf = 0, sumCost = 0;
+    for (const it of items){
+      sumProf += it.profitPct; sumCost += it.costPct || 0;
+      if (it.profitPct < out[code].minProfitPct) out[code].minProfitPct = it.profitPct;
+      if (it.profitPct > out[code].maxProfitPct) out[code].maxProfitPct = it.profitPct;
+      if (it.profitPct < 0) out[code].hasLoss = true;
+    }
+    out[code].avgProfitPct = sumProf / items.length;
+    out[code].avgCostPct = sumCost / items.length;
+    out[code].isLoss = out[code].avgProfitPct < 0;
+  }
+  return out;
+}
+// 페이지 로드 즉시 fallback 데이터 채움. fetchProfit 성공하면 덮어씀.
+let PROFIT = buildProfitFromRaws(PROFIT_FALLBACK_RAWS);
+console.log(`[PROFIT] 인라인 fallback ${Object.keys(PROFIT).length}개 코드 즉시 로드`);
+function parsePctOrWon(s){
+  if (s == null) return null;
+  s = String(s).trim().replace(/[₩\s,"]/g,'');
+  if (!s || s === '-') return null;
+  const n = parseFloat(s.replace(/%/, ''));
+  return isFinite(n) ? n : null;
+}
+// 원가율 시트 — JSONP 방식 사용 (fetchSheetGviz 재활용 → CORS 우회 → file:// 환경에서도 작동)
+async function fetchProfit(){
+  try {
+    if (typeof fetchSheetGviz !== 'function' || typeof gvizToRows !== 'function'){
+      console.warn('[PROFIT] fetchSheetGviz 함수 미준비'); return false;
+    }
+    const data = await fetchSheetGviz('원가율');
+    const rows = gvizToRows(data);
+    if (!rows || rows.length < 2){ console.warn('[PROFIT] 원가율 시트 빈 응답'); return false; }
+    const out = {};
+    for (let i = 1; i < rows.length; i++){
+      const r = rows[i];
+      if (!r || !r[1]) continue;
+      const name = String(r[0]||'').trim();
+      const code = String(r[1]||'').trim();
+      if (!code || !name) continue;
+      const sosobiga = parsePctOrWon(r[2]);
+      const cost = parsePctOrWon(r[3]);
+      const costPct = parsePctOrWon(r[4]);
+      const profitPct = parsePctOrWon(r[11]);
+      const profit = parsePctOrWon(r[12]);
+      const avgPrice = parsePctOrWon(r[13]);
+      if (profitPct == null) continue;
+      if (!out[code]) out[code] = { items: [], avgProfitPct: 0, minProfitPct: Infinity, maxProfitPct: -Infinity, avgCostPct: 0, isLoss: false, hasLoss: false };
+      out[code].items.push({ name, costPct, profitPct, profit, avgPrice, sosobiga, cost });
+    }
+    if (!Object.keys(out).length){ console.warn('[PROFIT] 파싱된 코드 없음'); return false; }
+    // 코드별 집계
+    for (const code in out){
+      const items = out[code].items;
+      let sumProf = 0, sumCost = 0;
+      for (const it of items){
+        sumProf += it.profitPct; sumCost += it.costPct || 0;
+        if (it.profitPct < out[code].minProfitPct) out[code].minProfitPct = it.profitPct;
+        if (it.profitPct > out[code].maxProfitPct) out[code].maxProfitPct = it.profitPct;
+        if (it.profitPct < 0) out[code].hasLoss = true;
+      }
+      out[code].avgProfitPct = sumProf / items.length;
+      out[code].avgCostPct = sumCost / items.length;
+      out[code].isLoss = out[code].avgProfitPct < 0;
+    }
+    PROFIT = out;
+    console.log(`[PROFIT] ✅ 라이브 ${Object.keys(PROFIT).length}개 코드 마진 데이터 로드 완료:`, Object.keys(PROFIT));
+    // 다이제스트/자본묶임 다시 그리기
+    if (typeof renderSummary === 'function') renderSummary();
+    return true;
+  } catch(e){
+    console.warn('[PROFIT] ⚠️ 라이브 fetch 실패 (' + e.message + ') — 인라인 fallback 데이터 사용 중');
+    return false;
+  }
+}
+// 코드의 이익율 (대표값) — 평균 이익율 사용. 여러 제품 있으면 최소/최대도 함께
+function codeProfitPct(code){
+  const p = PROFIT[code]; if (!p) return null;
+  return p.avgProfitPct;
+}
+function codeIsLoss(code){
+  const p = PROFIT[code]; return !!(p && p.isLoss);
+}
+// 실제 손실 추정 = 자본묶임 × |음수 이익율|
+function estimateRealLoss(code, tiedCap){
+  const p = PROFIT[code]; if (!p || !p.isLoss) return 0;
+  return tiedCap * (Math.abs(p.avgProfitPct) / 100);
+}
 // "Primary" blocks are the ones the user declared as the tracking unit for the code
 // in the 기준시트 D열(기준값). Examples: code FB-I has std="반제품", so the 원재료
 // block is the primary tracking unit (the 제품 block is empty for that code).
@@ -816,6 +1030,31 @@ function renderSummary(){
     : '—';
   document.getElementById('digTurn').innerHTML = turnStr;
   document.getElementById('digTiedUp').textContent = excessCount > 0 ? `${wonShort(tiedUpCap)} · ${excessCount}개` : '없음';
+  // 평균 이익율 / 적자 코드 수 (PROFIT 데이터 기반)
+  const profitCodes = GIJUN.map(r => r[0]).filter(c => PROFIT[c]);
+  if (profitCodes.length){
+    // 자산 가중 평균 이익율
+    let wProf = 0, wWeight = 0, lossCount = 0;
+    for (const code of profitCodes){
+      const m = codeMonth(code, mi);
+      const p = PROFIT[code];
+      const w = (m && m.enda) ? m.enda : 1;
+      wProf += p.avgProfitPct * w;
+      wWeight += w;
+      if (p.isLoss) lossCount++;
+    }
+    const avgMargin = wWeight ? wProf/wWeight : 0;
+    const marginEl = document.getElementById('digMargin');
+    if (marginEl){
+      marginEl.textContent = (avgMargin >= 0 ? '+' : '') + avgMargin.toFixed(1) + '%';
+      marginEl.style.color = avgMargin >= 0 ? 'var(--green)' : 'var(--magenta)';
+    }
+    const lossEl = document.getElementById('digLoss');
+    if (lossEl) lossEl.textContent = lossCount > 0 ? `${lossCount}개 코드` : '없음';
+  } else {
+    const marginEl = document.getElementById('digMargin'); if (marginEl) marginEl.textContent = '—';
+    const lossEl = document.getElementById('digLoss'); if (lossEl) lossEl.textContent = '—';
+  }
   // 동기화 시각 표시
   const syncTimeEl = document.getElementById('digSyncTime');
   const syncDotEl = document.getElementById('digSyncDot');
@@ -922,13 +1161,28 @@ function renderSummary(){
     : `<div style="background:#dcfce7; border-left:3px solid #22c55e; padding:8px 12px; border-radius:6px; font-size:12px"><strong style="color:#166534">자본 묶임 없음</strong></div>`;
   const tuTb = document.querySelector('#tiedUpTable tbody'); tuTb.innerHTML='';
   if (!tiedUp.length){
-    tuTb.innerHTML='<tr><td colspan="6" style="color:var(--muted); text-align:center; padding:14px">해당 없음</td></tr>';
+    tuTb.innerHTML='<tr><td colspan="10" style="color:var(--muted); text-align:center; padding:14px">해당 없음</td></tr>';
   } else {
     tiedUp.slice(0,15).forEach((t,i)=>{
       const pct = totalTied ? (t.tiedCap/totalTied*100).toFixed(0) : 0;
       const status = turnStatusLabel(t.days, t.cat);
       const statusPill = `<span style="display:inline-block; padding:2px 8px; border-radius:10px; font-size:10px; font-weight:600; background:${status.bg}; color:${status.color}">${status.label}</span>`;
-      tuTb.insertAdjacentHTML('beforeend', `<tr class="tiedup-row" data-code="${t.code}" title="클릭 시 옵션 드릴다운"><td>${i+1}</td><td><strong>${t.code}</strong></td><td>${t.item}</td><td class="num">${wonShort(t.stockA)}</td><td class="num">${daysCappedText(t.days)}</td><td class="num">${statusPill}</td><td class="num"><strong style="color:#991b1b">${wonShort(t.tiedCap)}</strong> <span style="font-size:10px; color:var(--muted)">${pct}%</span></td><td></td></tr>`);
+      // 이익율 컬럼
+      const profitPct = codeProfitPct(t.code);
+      let profitCell = '<td class="num" style="color:var(--muted)">—</td>';
+      let realLossCell = '<td class="num" style="color:var(--muted)">—</td>';
+      if (profitPct !== null){
+        const color = profitPct >= 0 ? 'var(--green)' : 'var(--magenta)';
+        const sign = profitPct >= 0 ? '+' : '';
+        profitCell = `<td class="num" style="color:${color}; font-weight:600">${sign}${profitPct.toFixed(1)}%</td>`;
+        if (profitPct < 0){
+          const realLoss = estimateRealLoss(t.code, t.tiedCap);
+          realLossCell = `<td class="num"><strong style="color:#991b1b">-${wonShort(realLoss)}</strong></td>`;
+        } else {
+          realLossCell = '<td class="num" style="color:var(--muted)">·</td>';
+        }
+      }
+      tuTb.insertAdjacentHTML('beforeend', `<tr class="tiedup-row" data-code="${t.code}" title="클릭 시 옵션 드릴다운"><td>${i+1}</td><td><strong>${t.code}</strong></td><td>${t.item}</td><td class="num">${wonShort(t.stockA)}</td><td class="num">${daysCappedText(t.days)}</td><td class="num">${statusPill}</td>${profitCell}<td class="num"><strong style="color:#991b1b">${wonShort(t.tiedCap)}</strong> <span style="font-size:10px; color:var(--muted)">${pct}%</span></td>${realLossCell}<td></td></tr>`);
     });
     // 행 클릭 → 옵션 드릴다운
     tuTb.querySelectorAll('.tiedup-row').forEach(r=>{
@@ -1367,6 +1621,42 @@ function generateInsights(mi){
       priority: 7
     });
   }
+  // ----- 9.5 적자 코드 경고 (PROFIT 데이터 기반) -----
+  if (Object.keys(PROFIT).length){
+    const lossCodes = [];
+    for (const r of GIJUN){
+      const code = r[0]; const p = PROFIT[code]; if (!p || !p.isLoss) continue;
+      const m = codeMonth(code, mi); if (!m) continue;
+      lossCodes.push({ code, item: LOOKUP[code].item, profitPct: p.avgProfitPct, stockA: m.enda || 0 });
+    }
+    if (lossCodes.length){
+      lossCodes.sort((a,b)=> a.profitPct - b.profitPct);  // 가장 큰 적자부터
+      const top = lossCodes[0];
+      const totLossStock = lossCodes.reduce((s,x)=>s+x.stockA, 0);
+      insights.push({
+        icon: '🔻',
+        text: `<strong style="color:#dc2626">적자 코드 ${lossCodes.length}개</strong> — 최악: <strong>${top.code} (${top.item}) ${top.profitPct.toFixed(1)}%</strong> · 적자 재고 합계 <strong>${wonShort(totLossStock)}</strong> — 가격/광고비 조정 또는 정리 검토`,
+        priority: 9
+      });
+    }
+    // 흑자 우수 코드 (이익율 20%+ + 재고 충분)
+    const winners = [];
+    for (const r of GIJUN){
+      const code = r[0]; const p = PROFIT[code]; if (!p) continue;
+      if (p.avgProfitPct < 20) continue;
+      const m = codeMonth(code, mi); if (!m || (m.endq||0) === 0) continue;
+      winners.push({ code, item: LOOKUP[code].item, profitPct: p.avgProfitPct, stockQ: m.endq });
+    }
+    if (winners.length){
+      winners.sort((a,b)=> b.profitPct - a.profitPct);
+      const top = winners[0];
+      insights.push({
+        icon: '⭐',
+        text: `흑자 우수: <strong>${top.code} (${top.item})</strong> 이익율 <strong style="color:#16a34a">+${top.profitPct.toFixed(1)}%</strong>${winners.length>1?` · 외 ${winners.length-1}개 코드 마진 20%+`:''} — 마케팅 강화 추천`,
+        priority: 5
+      });
+    }
+  }
   // ----- 10. 전반적인 안정성 메시지 (큰 이슈 없을 때) -----
   if (insights.length < 3){
     insights.push({ icon:'✅', text:'특이사항 없음 — 모든 지표 안정 범위 내', priority: 0 });
@@ -1390,6 +1680,26 @@ function renderAutoInsights(mi){
 
 // ========== 옵션 드릴다운 ==========
 // 코드의 모든 옵션을 분석하여 정체 원인 식별 + "이 옵션 제외 시 코드 회전" 계산
+// 옵션의 최근 취득원가 — 가장 가까운 입고월 단가 → 없으면 기초재고 단가 → 모두 없으면 null
+function optionLatestUnitCost(o, miMax){
+  miMax = (miMax == null) ? 11 : miMax;
+  // 1) miMax부터 거꾸로 가장 최근 입고 월 찾기
+  for (let k = miMax; k >= 0; k--){
+    const inq = o.inq[k] || 0, ina = o.ina[k] || 0;
+    if (inq > 0 && ina > 0) return { cost: ina/inq, month: k, source: '입고' };
+  }
+  // 2) 그래도 없으면 기초재고 단가 (1월 우선)
+  for (let k = 0; k <= miMax; k++){
+    const bq = o.begq[k] || 0, ba = o.bega[k] || 0;
+    if (bq > 0 && ba > 0) return { cost: ba/bq, month: k, source: '기초' };
+  }
+  // 3) 기말재고 단가 (그래도 없으면)
+  for (let k = miMax; k >= 0; k--){
+    const eq = o.endq[k] || 0, ea = o.enda[k] || 0;
+    if (eq > 0 && ea > 0) return { cost: ea/eq, month: k, source: '기말' };
+  }
+  return null;
+}
 function optionDaysOfInventory(o, mi){
   const stock = o.endq[mi] || 0;
   let total = 0, count = 0;
@@ -1911,7 +2221,7 @@ function renderTabDetail(){
       const opts=groupMap[ln];
       let sBegQ=0,sInQ=0,sSalQ=0,sConQ=0,sLossQ=0,sEndQ=0,sEndA=0;
       for (const o of opts){ sBegQ+=o.begq[mi]||0; sInQ+=o.inq[mi]||0; sSalQ+=o.salq[mi]||0; sConQ+=o.conq[mi]||0; sLossQ+=o.lossq[mi]||0; sEndQ+=o.endq[mi]||0; sEndA+=o.enda[mi]||0; }
-      otb.insertAdjacentHTML('beforeend', `<tr class="${groupCls}"><td>${ln} ${catPill}<span class="dim"> · ${opts.length} 옵션 · ${b.type}</span></td><td class="num">${fmt(sBegQ)}</td><td class="num pos">${sInQ?'+'+fmt(sInQ):'·'}</td><td class="num neg">${sSalQ?'−'+fmt(sSalQ):'·'}</td><td class="num neg">${sConQ?'−'+fmt(sConQ):'·'}</td><td class="num neg">${sLossQ?'−'+fmt(sLossQ):'·'}</td><td class="num">${fmt(sEndQ)}</td><td class="num">${wonShort(sEndA)}</td><td class="num">—</td></tr>`);
+      otb.insertAdjacentHTML('beforeend', `<tr class="${groupCls}"><td>${ln} ${catPill}<span class="dim"> · ${opts.length} 옵션 · ${b.type}</span></td><td class="num">${fmt(sBegQ)}</td><td class="num pos">${sInQ?'+'+fmt(sInQ):'·'}</td><td class="num neg">${sSalQ?'−'+fmt(sSalQ):'·'}</td><td class="num neg">${sConQ?'−'+fmt(sConQ):'·'}</td><td class="num neg">${sLossQ?'−'+fmt(sLossQ):'·'}</td><td class="num">${fmt(sEndQ)}</td><td class="num">${wonShort(sEndA)}</td><td class="num">—</td><td class="num">—</td></tr>`);
       opts.sort((a,b)=>(b.salq[mi]+b.conq[mi]+b.inq[mi])-(a.salq[mi]+a.conq[mi]+a.inq[mi]));
       for (const o of opts){
         const begq=o.begq[mi]||0, bega=o.bega[mi]||0;
@@ -1932,11 +2242,18 @@ function renderTabDetail(){
           const pillCls = months < 1 ? 'pill bad' : (months < 3 ? 'pill warn' : 'pill ok');
           burnHtml = `<span class="${pillCls}">${months.toFixed(1)}개월</span>`;
         }
-        otb.insertAdjacentHTML('beforeend', `<tr class="${optCls}"><td>└ ${o.n}</td><td class="num">${fmt(begq)}<br><span class="dim">${bega?wonShort(bega):''}</span></td><td class="num pos">${inq?'+'+fmt(inq):'·'}<br><span class="dim">${ina?wonShort(ina):''}</span></td><td class="num neg">${salq?'−'+fmt(salq):'·'}<br><span class="dim">${sala?wonShort(sala):''}</span></td><td class="num neg">${conq?'−'+fmt(conq):'·'}<br><span class="dim">${cona?wonShort(cona):''}</span></td><td class="num neg">${lossq?'−'+fmt(lossq):'·'}</td><td class="num">${fmt(endq)}</td><td class="num">${wonShort(enda)}</td><td class="num">${burnHtml}</td></tr>`);
+        // 최근 취득원가 — 가장 가까운 입고월 단가 (없으면 기초 / 기말 단가)
+        const unitCost = optionLatestUnitCost(o, mi);
+        let costHtml = '<span class="dim">—</span>';
+        if (unitCost){
+          const sourceBadge = unitCost.source === '입고' ? '' : `<span style="font-size:9px; color:var(--muted)"> (${unitCost.source})</span>`;
+          costHtml = `<strong>${won(Math.round(unitCost.cost))}</strong><br/><span class="dim" style="font-size:10px">${MONTHS[unitCost.month]}${sourceBadge}</span>`;
+        }
+        otb.insertAdjacentHTML('beforeend', `<tr class="${optCls}"><td>└ ${o.n}</td><td class="num">${fmt(begq)}<br><span class="dim">${bega?wonShort(bega):''}</span></td><td class="num pos">${inq?'+'+fmt(inq):'·'}<br><span class="dim">${ina?wonShort(ina):''}</span></td><td class="num neg">${salq?'−'+fmt(salq):'·'}<br><span class="dim">${sala?wonShort(sala):''}</span></td><td class="num neg">${conq?'−'+fmt(conq):'·'}<br><span class="dim">${cona?wonShort(cona):''}</span></td><td class="num neg">${lossq?'−'+fmt(lossq):'·'}</td><td class="num">${fmt(endq)}</td><td class="num">${wonShort(enda)}</td><td class="num">${costHtml}</td><td class="num">${burnHtml}</td></tr>`);
       }
     }
   }
-  if (!otb.innerHTML) otb.innerHTML='<tr><td colspan="9" style="color:var(--muted); text-align:center; padding:14px">옵션 데이터 없음</td></tr>';
+  if (!otb.innerHTML) otb.innerHTML='<tr><td colspan="10" style="color:var(--muted); text-align:center; padding:14px">옵션 데이터 없음</td></tr>';
 }
 function renderGijun(){ const tb=document.querySelector('#gijunTable tbody'); tb.innerHTML=''; for (const r of GIJUN) tb.insertAdjacentHTML('beforeend', `<tr><td><strong>${r[0]}</strong></td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td><td><span class="pill ${r[4]==='반제품'?'warn':'ok'}">${r[4]}</span></td><td>${r[5]}</td></tr>`); }
 
@@ -1949,9 +2266,12 @@ function parseMonths(s){
   return parseInt(m[1], 10);
 }
 function stockStatusOf(rec){
-  // returns one of: 폐기, 품절(완료), 품절(예정), 임박, 정상
+  // returns one of: 폐기, 품절 완료, 품절, 소진 임박, 주의 (≤3개월), 정상
   const st = (rec.status||'').trim();
-  if (st.includes('폐기')) return '폐기';
+  // 폐기 동의어 확장: 폐기/단종/처분/종료/정리/소각
+  if (/폐기|단종|처분|종료|정리|소각|discontinue/i.test(st)) return '폐기';
+  // restock 컬럼에 "폐기/안함/중단" 들어가는 경우도 폐기로
+  if (rec.restock && /폐기|안함|중단/i.test(String(rec.restock||''))) return '폐기';
   if (st.includes('품절')) return st.includes('완료')?'품절 완료':'품절';
   const n = parseMonths(rec.months_left);
   if (rec.stock === 0) return '품절';
@@ -1978,7 +2298,9 @@ function renderStock(){
   for (const r of inv){ byGrp[r.group] = byGrp[r.group]||{q:0,n:0}; byGrp[r.group].q+=(r.stock||0); byGrp[r.group].n+=1; }
   const grps = Object.keys(byGrp).sort((a,b)=>byGrp[b].q-byGrp[a].q);
   const qtys = grps.map(g=>byGrp[g].q);
-  if (chartStkGroup) chartStkGroup.destroy();
+  // 안전한 destroy: 변수 + canvas ID 양쪽으로 기존 차트 제거 (중복 정의 충돌 방지)
+  if (chartStkGroup) { try { chartStkGroup.destroy(); } catch(e){} chartStkGroup = null; }
+  const _existGrp = Chart.getChart && Chart.getChart('stkGroupChart'); if (_existGrp) _existGrp.destroy();
   chartStkGroup = new Chart(document.getElementById('stkGroupChart'), {
     type:'bar', data:{labels:grps, datasets:[{label:'재고 수량', data:qtys, backgroundColor:'#3a6df0', borderRadius:4, datalabels: dlbl('bar', (v)=>fmt(v))}]},
     options: withLabelRoom({responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}, tooltip:{callbacks:{label:(c)=>' '+fmt(c.parsed.y)+'개'}}}, scales:{x:{ticks:{font:{size:9}, maxRotation:60, minRotation:45}}, y:{ticks:{callback:v=>fmt(v)+'개'}}}})
@@ -1990,7 +2312,8 @@ function renderStock(){
   const stOrder = ['정상','주의 (≤3개월)','소진 임박','품절','품절 완료','폐기'];
   const stLabels = stOrder.filter(s=>byStat[s]);
   const stColors = {'정상':'#22c55e','주의 (≤3개월)':'#fbbf24','소진 임박':'#fb923c','품절':'#ef4444','품절 완료':'#a16207','폐기':'#6b7280'};
-  if (chartStkStatus) chartStkStatus.destroy();
+  if (chartStkStatus) { try { chartStkStatus.destroy(); } catch(e){} chartStkStatus = null; }
+  const _existSt = Chart.getChart && Chart.getChart('stkStatusChart'); if (_existSt) _existSt.destroy();
   chartStkStatus = new Chart(document.getElementById('stkStatusChart'), {
     type:'doughnut', data:{labels:stLabels, datasets:[{data:stLabels.map(l=>byStat[l].n), backgroundColor:stLabels.map(l=>stColors[l]||'#999'), borderWidth:2, borderColor:'#fff', datalabels: dlbl('doughnut')}]},
     options:{responsive:true, maintainAspectRatio:false, plugins:{legend:{position:'bottom', labels:{font:{size:10}}}, tooltip:{callbacks:{label:(c)=>` ${c.label}: ${c.parsed} SKU`}}}}
@@ -2112,9 +2435,12 @@ function parseMonths(s){
   return parseInt(m[1], 10);
 }
 function stockStatusOf(rec){
-  // returns one of: 폐기, 품절(완료), 품절(예정), 임박, 정상
+  // returns one of: 폐기, 품절 완료, 품절, 소진 임박, 주의 (≤3개월), 정상
   const st = (rec.status||'').trim();
-  if (st.includes('폐기')) return '폐기';
+  // 폐기 동의어 확장: 폐기/단종/처분/종료/정리/소각
+  if (/폐기|단종|처분|종료|정리|소각|discontinue/i.test(st)) return '폐기';
+  // restock 컬럼에 "폐기/안함/중단" 들어가는 경우도 폐기로
+  if (rec.restock && /폐기|안함|중단/i.test(String(rec.restock||''))) return '폐기';
   if (st.includes('품절')) return st.includes('완료')?'품절 완료':'품절';
   const n = parseMonths(rec.months_left);
   if (rec.stock === 0) return '품절';
@@ -2141,7 +2467,9 @@ function renderStock(){
   for (const r of inv){ byGrp[r.group] = byGrp[r.group]||{q:0,n:0}; byGrp[r.group].q+=(r.stock||0); byGrp[r.group].n+=1; }
   const grps = Object.keys(byGrp).sort((a,b)=>byGrp[b].q-byGrp[a].q);
   const qtys = grps.map(g=>byGrp[g].q);
-  if (chartStkGroup) chartStkGroup.destroy();
+  // 안전한 destroy: 변수 + canvas ID 양쪽으로 기존 차트 제거 (중복 정의 충돌 방지)
+  if (chartStkGroup) { try { chartStkGroup.destroy(); } catch(e){} chartStkGroup = null; }
+  const _existGrp = Chart.getChart && Chart.getChart('stkGroupChart'); if (_existGrp) _existGrp.destroy();
   chartStkGroup = new Chart(document.getElementById('stkGroupChart'), {
     type:'bar', data:{labels:grps, datasets:[{label:'재고 수량', data:qtys, backgroundColor:'#3a6df0', borderRadius:4, datalabels: dlbl('bar', (v)=>fmt(v))}]},
     options: withLabelRoom({responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}, tooltip:{callbacks:{label:(c)=>' '+fmt(c.parsed.y)+'개'}}}, scales:{x:{ticks:{font:{size:9}, maxRotation:60, minRotation:45}}, y:{ticks:{callback:v=>fmt(v)+'개'}}}})
@@ -2153,7 +2481,8 @@ function renderStock(){
   const stOrder = ['정상','주의 (≤3개월)','소진 임박','품절','품절 완료','폐기'];
   const stLabels = stOrder.filter(s=>byStat[s]);
   const stColors = {'정상':'#22c55e','주의 (≤3개월)':'#fbbf24','소진 임박':'#fb923c','품절':'#ef4444','품절 완료':'#a16207','폐기':'#6b7280'};
-  if (chartStkStatus) chartStkStatus.destroy();
+  if (chartStkStatus) { try { chartStkStatus.destroy(); } catch(e){} chartStkStatus = null; }
+  const _existSt = Chart.getChart && Chart.getChart('stkStatusChart'); if (_existSt) _existSt.destroy();
   chartStkStatus = new Chart(document.getElementById('stkStatusChart'), {
     type:'doughnut', data:{labels:stLabels, datasets:[{data:stLabels.map(l=>byStat[l].n), backgroundColor:stLabels.map(l=>stColors[l]||'#999'), borderWidth:2, borderColor:'#fff', datalabels: dlbl('doughnut')}]},
     options:{responsive:true, maintainAspectRatio:false, plugins:{legend:{position:'bottom', labels:{font:{size:10}}}, tooltip:{callbacks:{label:(c)=>` ${c.label}: ${c.parsed} SKU`}}}}
@@ -2650,6 +2979,21 @@ async function refreshViaGviz(){
       throw new Error(`'${sn}' 시트 로드 실패: ${e.message}`);
     }
   }
+  // 진단용: 각 시트의 첫 옵션 행을 콘솔에 출력 (코드-데이터 매칭 검증)
+  window._lastFetchedSheets = sheets;
+  console.log('========== 🔍 시트 fetch 결과 — 각 시트의 블록 헤더 + 첫 옵션 ==========');
+  for (const code of PRODUCT_CODES){
+    const rows = sheets[code]; if (!rows) { console.warn(`${code}: 시트 데이터 없음`); continue; }
+    // 첫 4행에서 블록 헤더 + 옵션 행 찾기
+    let pumokRow = '', annualRow = '', optionStartRow = '';
+    for (let i = 0; i < Math.min(8, rows.length); i++){
+      const r = rows[i]; if (!r) continue;
+      const joined = r.slice(0, 4).map(c => String(c||'').trim()).filter(Boolean).join(' | ');
+      if (i === 1) annualRow = joined;
+      if (i === 4 || i === 5) optionStartRow = optionStartRow || joined;
+    }
+    console.log(`${code}: 연간행=[${annualRow}] | 첫옵션=[${optionStartRow}]`);
+  }
   return sheets;
 }
 
@@ -2877,6 +3221,8 @@ document.getElementById('statusText').textContent='저장본 데이터 표시 �
 // Initial auto sync: 페이지 로드 직후 백그라운드에서 라이브 동기화 자동 실행
 // 1) 짧은 기준시트 동기화 먼저 (빠름) → 2) 전체 라이브 동기화 (이전 자산 캡처 후 비교)
 async function initialAutoSync(){
+  // 원가율 데이터 백그라운드 fetch (PROFIT 채움)
+  fetchProfit().then(ok => { if (ok && typeof renderSummary === 'function') renderSummary(); });
   // 캐시 자산 캡처 (라이브 결과와 비교용)
   const cachedAtSelected = (() => {
     let a = 0;
@@ -2891,7 +3237,17 @@ async function initialAutoSync(){
   // ⚠️ refreshFromSheet 단계 제거 — 기준시트만 갱신되면 캐시 DATA와 매핑 불일치로
   // KPI가 1.6 → 1.7 → 1.6 식으로 튀는 문제 발생. 한 번에 전체 동기화만 실행.
   try {
+    console.log('[AUTO SYNC] 시작 — 시트의 모든 데이터(GIJUN/DATA/INVENTORY) 가져옴');
     await refreshAllAuto();
+    // INVENTORY 상태 분포 자동 로깅 (재고/폐기/품절 등)
+    if (typeof INVENTORY !== 'undefined' && INVENTORY.length){
+      const statusCounts = {};
+      for (const r of INVENTORY){
+        const s = stockStatusOf(r);
+        statusCounts[s] = (statusCounts[s]||0) + 1;
+      }
+      console.log(`[AUTO SYNC] ✅ 재고 ${INVENTORY.length}건 동기화 완료. 상태 분포:`, statusCounts);
+    }
     // 동기화 후 자산 비교
     const newAtSelected = (() => {
       let a = 0;
