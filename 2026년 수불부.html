@@ -190,6 +190,16 @@ function withLabelRoom(options, opts){
 </script>
 </head>
 <body>
+<!-- 초기 로딩 오버레이 — 시트 동기화 완료까지 메인 화면 가림 -->
+<div id="bootOverlay" style="position:fixed; inset:0; background:#fff; z-index:9999; display:flex; align-items:center; justify-content:center; flex-direction:column; font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Pretendard','Noto Sans KR',sans-serif;">
+  <div style="font-size:42px; margin-bottom:18px">📊</div>
+  <div style="font-size:18px; font-weight:600; color:#1a1a1a; margin-bottom:8px; letter-spacing:-0.01em">대시보드 로딩 중</div>
+  <div id="bootMsg" style="font-size:13px; color:#888; max-width:400px; text-align:center; line-height:1.5">Google Sheet에서 최신 데이터를 가져오는 중입니다…</div>
+  <div style="margin-top:24px; width:260px; height:4px; background:#f3f3f3; border-radius:2px; overflow:hidden">
+    <div id="bootBar" style="width:5%; height:100%; background:#1a1a1a; transition:width 0.4s ease"></div>
+  </div>
+  <div id="bootHint" style="margin-top:14px; font-size:11px; color:#bbb; max-width:380px; text-align:center; line-height:1.6">최초 접속은 5~10초 정도 걸립니다. 이후 새로고침 시에도 항상 최신 시트 데이터로 표시됩니다.</div>
+</div>
 <!-- 옵션 드릴다운 모달 -->
 <div id="drillModal" onclick="if(event.target.id==='drillModal') closeDrill()">
   <div class="modal-card">
@@ -3219,67 +3229,91 @@ document.getElementById('refreshBtn').onclick=refreshFromSheet;
 for (let i=MONTHS.length-1;i>=0;i--){ if (ACTIVE_MASK[i]){ SELECTED_MONTH_IDX=i; break; } }
 if (ACTIVE_MASK[3]) SELECTED_MONTH_IDX=3;
 TAB_MONTH_IDX=SELECTED_MONTH_IDX;
-renderMonthPills(); renderSummary(); renderTabList(); renderGijun();
-document.getElementById('statusText').textContent='저장본 데이터 표시 중 · 백그라운드 자동 동기화 시작…';
+// ⚠️ 첫 렌더는 베이크 데이터로 하지 않음 — initialBoot()이 시트 fetch 후 한 번만 렌더
+// 이렇게 해야 사용자가 "옛 값 → 새 값" 깜박임을 경험하지 않음
+document.getElementById('statusText').textContent='시트 동기화 중…';
 // Initial auto sync: 페이지 로드 직후 백그라운드에서 라이브 동기화 자동 실행
 // 1) 짧은 기준시트 동기화 먼저 (빠름) → 2) 전체 라이브 동기화 (이전 자산 캡처 후 비교)
-async function initialAutoSync(){
-  // 원가율 데이터 백그라운드 fetch (PROFIT 채움)
-  fetchProfit().then(ok => { if (ok && typeof renderSummary === 'function') renderSummary(); });
-  // 캐시 자산 캡처 (라이브 결과와 비교용)
-  const cachedAtSelected = (() => {
-    let a = 0;
-    for (const r of GIJUN){ const m = codeMonth(r[0], SELECTED_MONTH_IDX); if (m) a += m.enda || 0; }
-    return a;
-  })();
-  // 동기화 인디케이터를 다이제스트 영역에 표시
-  const syncTimeEl = document.getElementById('digSyncTime');
-  const syncDotEl = document.getElementById('digSyncDot');
-  if (syncTimeEl){ syncTimeEl.textContent = '동기화 중…'; }
-  if (syncDotEl){ syncDotEl.style.background = '#f59e0b'; syncDotEl.style.animation = 'pulse 1s ease-in-out infinite'; }
-  // ⚠️ refreshFromSheet 단계 제거 — 기준시트만 갱신되면 캐시 DATA와 매핑 불일치로
-  // KPI가 1.6 → 1.7 → 1.6 식으로 튀는 문제 발생. 한 번에 전체 동기화만 실행.
-  try {
-    console.log('[AUTO SYNC] 시작 — 시트의 모든 데이터(GIJUN/DATA/INVENTORY) 가져옴');
-    await refreshAllAuto();
-    // INVENTORY 상태 분포 자동 로깅 (재고/폐기/품절 등)
-    if (typeof INVENTORY !== 'undefined' && INVENTORY.length){
-      const statusCounts = {};
-      for (const r of INVENTORY){
-        const s = stockStatusOf(r);
-        statusCounts[s] = (statusCounts[s]||0) + 1;
-      }
-      console.log(`[AUTO SYNC] ✅ 재고 ${INVENTORY.length}건 동기화 완료. 상태 분포:`, statusCounts);
-    }
-    // 동기화 후 자산 비교
-    const newAtSelected = (() => {
-      let a = 0;
-      for (const r of GIJUN){ const m = codeMonth(r[0], SELECTED_MONTH_IDX); if (m) a += m.enda || 0; }
-      return a;
-    })();
-    if (Math.abs(newAtSelected - cachedAtSelected) > 1){
-      const diff = newAtSelected - cachedAtSelected;
-      const pct = cachedAtSelected ? (diff/cachedAtSelected*100) : 0;
-      const arrow = diff >= 0 ? '▲' : '▼';
-      const color = diff >= 0 ? '#22c55e' : '#fb923c';
-      // 자산 변경 알림 토스트
-      const toast = document.createElement('div');
-      toast.style.cssText = 'position:fixed; bottom:20px; right:20px; background:#1e293b; color:#fff; padding:12px 16px; border-radius:8px; font-size:13px; z-index:2000; box-shadow:0 8px 24px rgba(0,0,0,0.3); max-width:340px; line-height:1.5;';
-      toast.innerHTML = `<div style="font-weight:700; margin-bottom:4px">📊 라이브 동기화 완료</div><div style="font-size:11px; opacity:0.8">${MONTHS[SELECTED_MONTH_IDX]} 자산 캐시 → 최신</div><div style="margin-top:6px"><span style="opacity:0.7">${wonShort(cachedAtSelected)}</span> → <strong style="color:${color}">${wonShort(newAtSelected)}</strong> <span style="color:${color}">${arrow} ${Math.abs(pct).toFixed(1)}%</span></div>`;
-      document.body.appendChild(toast);
-      setTimeout(()=>{ toast.style.transition='opacity 0.5s'; toast.style.opacity='0'; setTimeout(()=>toast.remove(), 500); }, 5000);
-    }
-  } catch(e){
-    console.warn('전체 동기화 실패 (캐시 사용):', e);
-    if (syncDotEl){ syncDotEl.style.background = '#f59e0b'; syncDotEl.style.animation = ''; }
+// ========== 통합 부트 시퀀스 ==========
+// 원칙: 최초 접속과 라이브 동기화 후 상태가 100% 동일해야 함.
+// 베이크된 데이터는 "fetch 실패 시 폴백"으로만 사용. 평소엔 항상 시트 데이터로 단일 렌더.
+async function initialBoot(){
+  const overlay = document.getElementById('bootOverlay');
+  const msg = document.getElementById('bootMsg');
+  const bar = document.getElementById('bootBar');
+  const hint = document.getElementById('bootHint');
+  function step(pct, text){
+    if (bar) bar.style.width = pct + '%';
+    if (msg) msg.textContent = text;
   }
-  if (syncDotEl){ syncDotEl.style.animation = ''; }
+  try {
+    step(15, '기준시트 + 16개 제품 시트 로딩 중…');
+    // 1) 시트별 fetch (refreshAllAuto의 핵심 — 단순화해서 직접 호출)
+    let sheets;
+    try {
+      sheets = await refreshViaGviz();
+    } catch(e){
+      throw new Error('시트 로딩 실패: ' + e.message);
+    }
+    step(65, '원가율 시트 로딩 중…');
+    // 2) 원가율 (병렬, 실패해도 인라인 fallback 유지)
+    const profitPromise = fetchProfit().catch(()=>false);
+    step(75, '데이터 정리 중…');
+    // 3) 전역 데이터 모두 시트 기준으로 재구축 (베이크 데이터 완전 대체)
+    const newGijun = buildGijunFromXlsx(sheets);
+    const newTabs = buildDataFromXlsx(sheets);
+    const newInv = buildInventoryFromXlsx(sheets);
+    if (!newGijun.length) throw new Error('기준시트가 비어있음 - 시트 공유 권한 확인');
+    GIJUN.length = 0; for (const r of newGijun) GIJUN.push(r);
+    LOOKUP = buildLookup();
+    DATA.tabs = newTabs;
+    INVENTORY.length = 0; for (const r of newInv) INVENTORY.push(r);
+    step(85, '원가율 마무리…');
+    await profitPromise;
+    step(92, '대시보드 렌더링 중…');
+    // 4) 최초이자 유일한 렌더링 (캐시→덮어쓰기 X)
+    // ACTIVE_MASK 재계산 (시트 기준)
+    if (typeof activeMonthMask === 'function'){
+      const newMask = activeMonthMask();
+      for (let i = 0; i < newMask.length; i++) ACTIVE_MASK[i] = newMask[i];
+    }
+    // 가장 마지막 활성 월로 SELECTED_MONTH_IDX 자동 조정
+    for (let i = MONTHS.length - 1; i >= 0; i--){
+      if (ACTIVE_MASK[i]){ SELECTED_MONTH_IDX = i; TAB_MONTH_IDX = i; break; }
+    }
+    renderMonthPills();
+    renderSummary();
+    renderTabList();
+    renderGijun();
+    setSyncTime();
+    step(100, '완료!');
+    console.log(`[BOOT] ✅ 시트 데이터로 단일 렌더 완료 — GIJUN ${GIJUN.length} / 코드 ${Object.keys(DATA.tabs).length} / 재고 ${INVENTORY.length}`);
+    // 짧은 페이드 아웃 후 오버레이 제거
+    setTimeout(()=>{
+      if (overlay){ overlay.style.transition = 'opacity 0.4s ease'; overlay.style.opacity = '0'; }
+      setTimeout(()=>{ if (overlay) overlay.style.display = 'none'; }, 400);
+    }, 200);
+  } catch(e){
+    console.error('[BOOT] ❌ 시트 동기화 실패:', e);
+    // 폴백: 베이크된 데이터로라도 렌더 (오프라인 등)
+    if (msg) msg.innerHTML = '⚠️ 시트 동기화 실패<br/><span style="font-size:11px; color:#dc2626; margin-top:6px; display:inline-block">' + e.message + '</span>';
+    if (hint) hint.innerHTML = '캐시(저장본) 데이터로 표시합니다. 시트 권한/네트워크 확인 후 새로고침하세요.';
+    if (bar) bar.style.background = '#dc2626';
+    setTimeout(()=>{
+      try {
+        renderMonthPills(); renderSummary(); renderTabList(); renderGijun();
+      } catch(_){}
+      if (overlay){ overlay.style.transition = 'opacity 0.4s ease'; overlay.style.opacity = '0'; }
+      setTimeout(()=>{ if (overlay) overlay.style.display = 'none'; }, 400);
+    }, 3000);
+  }
 }
 // 펄스 애니메이션 CSS
 const pulseStyle = document.createElement('style');
 pulseStyle.textContent = '@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }';
 document.head.appendChild(pulseStyle);
-setTimeout(initialAutoSync, 300);
+// 페이지 로드 즉시 부트 시작 (setTimeout 없이)
+initialBoot();
 </script>
 </body>
 </html>
