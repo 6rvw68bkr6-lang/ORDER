@@ -1110,6 +1110,408 @@ footer { color:#64748b !important; }
 .compare-columns.blue .col-bar.now .col-plot i {
   background:linear-gradient(180deg, #60a5fa, #2563eb);
 }
+
+/* Report / print view */
+#view-report {
+  color:#e5edf7;
+}
+.report-page {
+  max-width:1120px;
+  margin:0 auto 34px;
+  padding:28px;
+  border:1px solid rgba(148,163,184,0.18);
+  border-radius:14px;
+  background:linear-gradient(180deg, rgba(15,23,42,0.90), rgba(11,18,32,0.96));
+  box-shadow:0 24px 70px rgba(0,0,0,0.28);
+}
+.report-toolbar {
+  display:flex;
+  justify-content:space-between;
+  gap:18px;
+  align-items:flex-start;
+  padding-bottom:18px;
+  border-bottom:1px solid rgba(148,163,184,0.16);
+  margin-bottom:18px;
+}
+.report-kicker {
+  font-size:10px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:#60a5fa;
+  font-weight:800;
+  margin-bottom:6px;
+}
+.report-toolbar h2 {
+  margin:0;
+  color:#fff;
+  font-size:26px;
+  line-height:1.2;
+  letter-spacing:0;
+}
+.report-toolbar p {
+  margin:8px 0 0;
+  color:#94a3b8;
+  font-size:12px;
+}
+.report-print-btn {
+  white-space:nowrap;
+  background:#2563eb !important;
+  color:#fff !important;
+  border:1px solid rgba(96,165,250,0.45) !important;
+}
+.report-hero {
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:18px;
+  padding:18px 20px;
+  border-radius:12px;
+  background:linear-gradient(135deg, rgba(37,99,235,0.20), rgba(34,197,94,0.08));
+  border:1px solid rgba(96,165,250,0.20);
+  margin-bottom:14px;
+}
+.report-hero span {
+  display:block;
+  color:#93c5fd;
+  font-size:11px;
+  font-weight:800;
+  margin-bottom:6px;
+}
+.report-hero strong {
+  display:block;
+  color:#fff;
+  font-size:24px;
+  line-height:1.25;
+}
+.report-hero p {
+  margin:0;
+  color:#cbd5e1;
+  font-size:13px;
+  text-align:right;
+}
+.report-kpi-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(145px, 1fr));
+  gap:10px;
+  margin-bottom:16px;
+}
+.report-kpi {
+  min-height:92px;
+  padding:13px 14px;
+  border-radius:10px;
+  background:rgba(255,255,255,0.045);
+  border:1px solid rgba(148,163,184,0.14);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.035);
+}
+.report-kpi span {
+  display:block;
+  color:#94a3b8;
+  font-size:11px;
+  font-weight:800;
+  margin-bottom:9px;
+}
+.report-kpi strong {
+  display:block;
+  color:#fff;
+  font-size:22px;
+  line-height:1.1;
+  letter-spacing:0;
+}
+.report-kpi em {
+  display:block;
+  color:#94a3b8;
+  font-size:11px;
+  font-style:normal;
+  margin-top:8px;
+}
+.report-kpi.blue { border-left:3px solid #60a5fa; }
+.report-kpi.green { border-left:3px solid #22c55e; }
+.report-kpi.cyan { border-left:3px solid #06b6d4; }
+.report-kpi.orange { border-left:3px solid #f59e0b; }
+.report-kpi.pink, .report-kpi.red, .report-kpi.down { border-left:3px solid #fb7185; }
+.report-kpi.up { border-left:3px solid #86efac; }
+.report-section {
+  margin-top:14px;
+  padding:16px 18px;
+  border-radius:12px;
+  border:1px solid rgba(148,163,184,0.14);
+  background:rgba(2,6,23,0.18);
+}
+.report-section-head {
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:12px;
+  margin-bottom:12px;
+}
+.report-section h3 {
+  margin:0;
+  color:#fff;
+  font-size:16px;
+  letter-spacing:0;
+}
+.report-section-head span {
+  color:#94a3b8;
+  font-size:11px;
+  white-space:nowrap;
+}
+.report-insights {
+  margin:0;
+  padding:0;
+  list-style:none;
+  display:grid;
+  gap:8px;
+}
+.report-insights li {
+  display:grid;
+  grid-template-columns:24px 1fr;
+  gap:10px;
+  align-items:start;
+  color:#dbeafe;
+  font-size:13px;
+  line-height:1.55;
+}
+.report-insights b {
+  display:grid;
+  place-items:center;
+  width:22px;
+  height:22px;
+  border-radius:999px;
+  background:rgba(37,99,235,0.22);
+  color:#bfdbfe;
+  font-size:11px;
+}
+.report-grid-2 {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+.report-table {
+  width:100%;
+  border-collapse:collapse;
+  color:#dbeafe !important;
+  font-size:12px;
+}
+.report-table th {
+  color:#7f93b1 !important;
+  font-size:10.5px !important;
+  font-weight:800;
+  padding:8px 8px !important;
+  border-bottom:1px solid rgba(148,163,184,0.16) !important;
+}
+.report-table td {
+  padding:9px 8px !important;
+  border-bottom:1px solid rgba(148,163,184,0.10) !important;
+}
+.report-table .num {
+  text-align:right;
+  white-space:nowrap;
+}
+.report-table strong,
+.report-table .pos {
+  color:#dbeafe;
+}
+.report-table .neg {
+  color:#fda4af;
+}
+.report-badge {
+  display:inline-block;
+  padding:3px 7px;
+  border-radius:999px;
+  color:#bfdbfe;
+  background:rgba(37,99,235,0.18);
+  border:1px solid rgba(96,165,250,0.18);
+  font-size:10.5px;
+  font-weight:800;
+  white-space:nowrap;
+}
+.report-empty {
+  padding:18px 10px;
+  color:#94a3b8;
+  border:1px dashed rgba(148,163,184,0.20);
+  border-radius:10px;
+  font-size:12px;
+  text-align:center;
+}
+@media (max-width:900px) {
+  .report-toolbar,
+  .report-hero {
+    display:block;
+  }
+  .report-hero p {
+    text-align:left;
+    margin-top:10px;
+  }
+  .report-grid-2 {
+    grid-template-columns:1fr;
+  }
+}
+@media print {
+  @page {
+    size:A4;
+    margin:12mm;
+  }
+  * {
+    -webkit-print-color-adjust:exact;
+    print-color-adjust:exact;
+  }
+  html, body {
+    background:#fff !important;
+    color:#111827 !important;
+    font-size:10.5px !important;
+  }
+  .fb-sidebar,
+  body > header,
+  .wrap > header,
+  #topTabs,
+  #filterBanner,
+  #drillModal,
+  .report-print-btn {
+    display:none !important;
+  }
+  .wrap {
+    max-width:none !important;
+    margin:0 !important;
+    padding:0 !important;
+  }
+  .wrap > *:not(#view-report) {
+    display:none !important;
+  }
+  #view-report {
+    display:block !important;
+    color:#111827 !important;
+  }
+  .report-page {
+    max-width:none !important;
+    margin:0 !important;
+    padding:0 !important;
+    border:0 !important;
+    border-radius:0 !important;
+    background:#fff !important;
+    box-shadow:none !important;
+    color:#111827 !important;
+  }
+  .report-toolbar {
+    display:block !important;
+    margin-bottom:12px !important;
+    padding-bottom:10px !important;
+    border-bottom:2px solid #111827 !important;
+  }
+  .report-kicker {
+    color:#2563eb !important;
+  }
+  .report-toolbar h2 {
+    color:#111827 !important;
+    font-size:22px !important;
+  }
+  .report-toolbar p {
+    color:#4b5563 !important;
+  }
+  .report-hero {
+    display:block !important;
+    padding:12px 14px !important;
+    border:1px solid #cbd5e1 !important;
+    background:#f8fafc !important;
+    margin-bottom:10px !important;
+  }
+  .report-hero span {
+    color:#2563eb !important;
+  }
+  .report-hero strong {
+    color:#111827 !important;
+    font-size:19px !important;
+  }
+  .report-hero p {
+    color:#374151 !important;
+    text-align:left !important;
+    margin-top:5px !important;
+  }
+  .report-kpi-grid {
+    grid-template-columns:repeat(4, 1fr) !important;
+    gap:6px !important;
+    margin-bottom:10px !important;
+  }
+  .report-kpi {
+    min-height:64px !important;
+    padding:8px 9px !important;
+    border:1px solid #d1d5db !important;
+    background:#fff !important;
+    box-shadow:none !important;
+  }
+  .report-kpi span {
+    color:#4b5563 !important;
+    margin-bottom:5px !important;
+  }
+  .report-kpi strong {
+    color:#111827 !important;
+    font-size:15px !important;
+  }
+  .report-kpi em {
+    color:#6b7280 !important;
+    margin-top:4px !important;
+  }
+  .report-section {
+    margin-top:9px !important;
+    padding:10px 0 !important;
+    border:0 !important;
+    border-top:1px solid #d1d5db !important;
+    border-radius:0 !important;
+    background:#fff !important;
+    break-inside:avoid;
+    page-break-inside:avoid;
+  }
+  .report-section h3 {
+    color:#111827 !important;
+    font-size:13px !important;
+  }
+  .report-section-head span {
+    color:#6b7280 !important;
+  }
+  .report-grid-2 {
+    grid-template-columns:1fr 1fr !important;
+    gap:10px !important;
+  }
+  .report-insights li {
+    color:#111827 !important;
+    font-size:10.5px !important;
+  }
+  .report-insights b {
+    background:#dbeafe !important;
+    color:#1d4ed8 !important;
+  }
+  .report-table {
+    color:#111827 !important;
+    font-size:9.5px !important;
+  }
+  .report-table th {
+    color:#374151 !important;
+    background:#f3f4f6 !important;
+    border-bottom:1px solid #9ca3af !important;
+    padding:5px 6px !important;
+  }
+  .report-table td {
+    color:#111827 !important;
+    border-bottom:1px solid #e5e7eb !important;
+    padding:5px 6px !important;
+  }
+  .report-table strong,
+  .report-table .pos {
+    color:#111827 !important;
+  }
+  .report-table .neg {
+    color:#b91c1c !important;
+  }
+  .report-badge {
+    color:#1d4ed8 !important;
+    background:#dbeafe !important;
+    border:1px solid #bfdbfe !important;
+  }
+  .report-empty {
+    color:#6b7280 !important;
+    border-color:#d1d5db !important;
+    padding:10px !important;
+  }
+}
 @media (max-width:1180px) {
   #view-summary .cards4 {
     grid-template-columns:repeat(2, minmax(0, 1fr)) !important;
@@ -1175,6 +1577,7 @@ footer { color:#64748b !important; }
   </header>
   <div class="tabs" id="topTabs">
     <div class="tab on" data-view="summary">📋 종합</div>
+    <div class="tab" data-view="report">🧾 보고서</div>
     <div class="tab" data-view="monthly">📈 월별분석</div>
     <div class="tab" data-view="compare">⚖️ 기간비교</div>
     <div class="tab" data-view="tiedup">💰 자본묶임</div>
@@ -1245,6 +1648,21 @@ footer { color:#64748b !important; }
       <div class="panel"><h3>당월 손실 발생 탭</h3><div class="ph-sub">불량+무상+폐기 수량이 발생한 탭만 표시</div><table id="lossTable"><thead><tr><th>#</th><th>탭</th><th>품목</th><th class="num">손실 수량</th></tr></thead><tbody></tbody></table></div>
       <div class="panel"><h3>알림 · 점검 사항</h3><div class="ph-sub">미입력, 손실 과다, 0금액 의심 등 결산 전 확인 필요 사항</div><ul class="alert-list" id="alertList"></ul></div>
     </div>
+  </div>
+
+  <!-- ============ 보고서 출력 ============ -->
+  <div id="view-report" style="display:none">
+    <section class="report-page" id="reportPage">
+      <div class="report-toolbar">
+        <div>
+          <div class="report-kicker">Executive Report</div>
+          <h2 id="reportTitle">수불부 월간 보고서</h2>
+          <p id="reportSubtitle">—</p>
+        </div>
+        <button class="btn report-print-btn" onclick="window.print()">PDF/인쇄</button>
+      </div>
+      <div id="reportBody"></div>
+    </section>
   </div>
 
   <!-- ============ 월별분석 탭 ============ -->
@@ -1906,7 +2324,7 @@ function isFlowTab(tab){ return !!(tab && tab.blocks && tab.blocks.length > 1); 
 function blockMonth(b, mi){ return (b.months && b.months[mi]) ? b.months[mi] : {begq:0,bega:0,inq:0,ina:0,salq:0,sala:0,conq:0,cona:0,lossq:0,lossa:0,movq:0,mova:0,endq:0,enda:0,groups:[]}; }
 function activeMonthMask(){ const mask=MONTHS.map(()=>false); for (const code in DATA.tabs){ const tab=DATA.tabs[code]; for (const b of (tab.blocks||[])){ (b.months||[]).forEach((mo,i)=>{ if ((mo.inq||0)||(mo.ina||0)||(mo.salq||0)||(mo.sala||0)||(mo.conq||0)||(mo.cona||0)||(mo.lossq||0)) mask[i]=true; }); } } return mask; }
 const ACTIVE_MASK = activeMonthMask();
-function renderMonthPills(){ const c=document.getElementById('monthPills'); c.innerHTML=''; MONTHS.forEach((m,i)=>{ const el=document.createElement('div'); el.className='mp'+(i===SELECTED_MONTH_IDX?' on':'')+(!ACTIVE_MASK[i]?' empty':''); el.textContent=m; el.onclick=()=>{ SELECTED_MONTH_IDX=i; renderMonthPills(); renderSummary(); renderTabList(); }; c.appendChild(el); }); }
+function renderMonthPills(){ const c=document.getElementById('monthPills'); c.innerHTML=''; MONTHS.forEach((m,i)=>{ const el=document.createElement('div'); el.className='mp'+(i===SELECTED_MONTH_IDX?' on':'')+(!ACTIVE_MASK[i]?' empty':''); el.textContent=m; el.onclick=()=>{ SELECTED_MONTH_IDX=i; renderMonthPills(); renderSummary(); renderTabList(); if (document.getElementById('view-report')?.style.display !== 'none' && typeof renderReportView === 'function') renderReportView(); }; c.appendChild(el); }); }
 // codeMonth — aggregates a code's monthly KPIs across its primary blocks.
 // For flow-style codes (multiple primary blocks), different metrics come from
 // different blocks to avoid double-counting:
@@ -3767,6 +4185,171 @@ function renderStockList(){
   }
   container.innerHTML = html;
 }
+// ========== 보고서 출력 화면 ==========
+function reportEsc(v){
+  return String(v ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+}
+function reportPlain(html){
+  const div = document.createElement('div');
+  div.innerHTML = html || '';
+  return div.textContent || div.innerText || '';
+}
+function reportRowsSource(){
+  return (_GIJUN_ORIGINAL && window.ACTIVE_FILTER && window.ACTIVE_FILTER.type) ? _GIJUN_ORIGINAL : GIJUN;
+}
+function reportMetaFromRow(r){
+  return { code:r[0], item:r[1] || r[0], vendor:r[2] || '', std:r[3] || '', display:r[4] || '', category:r[5] || '기타' };
+}
+function reportDelta(delta, pct){
+  const sign = delta >= 0 ? '+' : '-';
+  const pctText = Number.isFinite(pct) ? ` (${sign}${Math.abs(pct).toFixed(1)}%)` : '';
+  return `${sign}${wonShort(Math.abs(delta))}${pctText}`;
+}
+function reportKpi(title, value, sub, tone){
+  return `<div class="report-kpi ${tone||''}"><span>${reportEsc(title)}</span><strong>${reportEsc(value)}</strong><em>${reportEsc(sub || '')}</em></div>`;
+}
+function buildReportData(mi){
+  const source = reportRowsSource();
+  const totals = { endA:0, endQ:0, inA:0, inQ:0, outA:0, outQ:0, lossA:0, lossQ:0, prevEndA:0 };
+  const assetRows = [], inRows = [], outRows = [], tiedRows = [], stockoutRows = [], lossRows = [], daysArr = [];
+  for (const r of source){
+    const meta = reportMetaFromRow(r);
+    const code = meta.code;
+    const m = codeMonth(code, mi);
+    if (!m) continue;
+    const pm = mi > 0 ? codeMonth(code, mi-1) : null;
+    const outA = (m.sala || 0) + (m.cona || 0);
+    const outQ = (m.salq || 0) + (m.conq || 0);
+    const unitValue = m.endq > 0 ? (m.enda || 0) / m.endq : (m.begq > 0 ? (m.bega || 0) / m.begq : 0);
+    const lossA = (m.lossa || 0) || ((m.lossq || 0) * unitValue);
+    totals.endA += m.enda || 0;
+    totals.endQ += m.endq || 0;
+    totals.inA += m.ina || 0;
+    totals.inQ += m.inq || 0;
+    totals.outA += outA;
+    totals.outQ += outQ;
+    totals.lossA += lossA;
+    totals.lossQ += m.lossq || 0;
+    if (pm) totals.prevEndA += pm.enda || 0;
+    if (pm){
+      const delta = (m.enda || 0) - (pm.enda || 0);
+      const pct = pm.enda ? (delta / pm.enda) * 100 : null;
+      if (delta) assetRows.push({ code, item:meta.item, prev:pm.enda || 0, cur:m.enda || 0, delta, pct });
+    }
+    if ((m.ina || 0) > 0) inRows.push({ code, item:meta.item, qty:m.inq || 0, amount:m.ina || 0 });
+    if (outA > 0) outRows.push({ code, item:meta.item, qty:outQ, amount:outA });
+    if ((m.lossq || 0) > 0) lossRows.push({ code, item:meta.item, qty:m.lossq || 0, amount:lossA });
+    const days = codeDaysOfInventory(code, mi);
+    if (days !== null) daysArr.push(days);
+    const th = thresholdsFor(meta.category);
+    if (days !== null && days >= 180 && (m.enda || 0) > 0){
+      tiedRows.push({ code, item:meta.item, amount:m.enda || 0, days, cap:(m.enda || 0) * (Math.min(days, 1095) / 365) });
+    }
+    if (days !== null && days < th.ok && (m.endq || 0) > 0){
+      stockoutRows.push({ code, item:meta.item, qty:m.endq || 0, days, normal:th.ok });
+    }
+  }
+  assetRows.sort((a,b)=>Math.abs(b.delta)-Math.abs(a.delta));
+  inRows.sort((a,b)=>b.amount-a.amount);
+  outRows.sort((a,b)=>b.amount-a.amount);
+  tiedRows.sort((a,b)=>b.cap-a.cap);
+  stockoutRows.sort((a,b)=>a.days-b.days);
+  lossRows.sort((a,b)=>b.qty-a.qty);
+  const assetDelta = totals.endA - totals.prevEndA;
+  const assetDeltaPct = totals.prevEndA ? (assetDelta / totals.prevEndA) * 100 : null;
+  const turnMed = median(daysArr);
+  const tiedCap = tiedRows.reduce((s,r)=>s+r.cap, 0);
+  const insights = (typeof generateInsights === 'function' ? generateInsights(mi) : []).slice(0,5);
+  return { totals, assetDelta, assetDeltaPct, turnMed, measured:daysArr.length, tiedCap, assetRows, inRows, outRows, tiedRows, stockoutRows, lossRows, insights };
+}
+function reportSimpleTable(columns, rows, emptyText){
+  if (!rows.length) return `<div class="report-empty">${reportEsc(emptyText || '해당 항목 없음')}</div>`;
+  const head = columns.map(c => `<th class="${c.num?'num':''}">${reportEsc(c.label)}</th>`).join('');
+  const body = rows.map(row => `<tr>${columns.map(c => `<td class="${c.num?'num':''}">${c.html ? c.html(row) : reportEsc(row[c.key])}</td>`).join('')}</tr>`).join('');
+  return `<table class="report-table"><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table>`;
+}
+function renderReportView(){
+  const titleEl = document.getElementById('reportTitle');
+  const subEl = document.getElementById('reportSubtitle');
+  const bodyEl = document.getElementById('reportBody');
+  if (!titleEl || !subEl || !bodyEl) return;
+  const mi = SELECTED_MONTH_IDX;
+  const data = buildReportData(mi);
+  const { totals } = data;
+  titleEl.textContent = `[회계] 2026년 수불부 월간 보고서`;
+  subEl.textContent = `${MONTHS[mi]} 기준 · ${reportRowsSource().length}개 탭 · ${formatSyncTime()} · 출력 ${new Date().toLocaleString('ko-KR')}`;
+  const assetTone = data.assetDelta >= 0 ? 'up' : 'down';
+  const insightHtml = data.insights.length
+    ? data.insights.map((it,i)=>`<li><b>${i+1}</b><span>${reportEsc(reportPlain(it.text))}</span></li>`).join('')
+    : '<li><b>1</b><span>선택 월 기준으로 표시할 자동 인사이트가 없습니다.</span></li>';
+  const actionRows = [
+    ...data.lossRows.slice(0,2).map(r => ({ type:'손실 확인', code:r.code, item:r.item, metric:`${fmt(r.qty)}개 · ${wonShort(r.amount)}`, action:'손실/입력 원인 확인' })),
+    ...data.stockoutRows.slice(0,3).map(r => ({ type:'재입고 검토', code:r.code, item:r.item, metric:`${daysCappedText(r.days)} · ${fmt(r.qty)}개`, action:'출고 속도 기준 재입고 일정 확인' })),
+    ...data.tiedRows.slice(0,4).map(r => ({ type:'정체 재고', code:r.code, item:r.item, metric:`${daysCappedText(r.days)} · ${wonShort(r.cap)}`, action:'옵션 드릴다운 후 처분/프로모션 검토' }))
+  ].slice(0,7);
+  bodyEl.innerHTML = `
+    <div class="report-hero">
+      <div>
+        <span>월간 핵심 결론</span>
+        <strong>${reportEsc(MONTHS[mi])} 재고자산 ${reportEsc(wonShort(totals.endA))}</strong>
+      </div>
+      <p>전월 대비 ${reportEsc(reportDelta(data.assetDelta, data.assetDeltaPct))} · 매출/출고 ${reportEsc(wonShort(totals.outA))} · 자본묶임 ${reportEsc(data.tiedCap ? wonShort(data.tiedCap) : '없음')}</p>
+    </div>
+    <div class="report-kpi-grid">
+      ${reportKpi('재고자산', wonShort(totals.endA), `${fmt(totals.endQ)}개`, 'blue')}
+      ${reportKpi('전월 대비', reportDelta(data.assetDelta, data.assetDeltaPct), '기말 재고금액 기준', assetTone)}
+      ${reportKpi('매출/출고', wonShort(totals.outA), `${fmt(totals.outQ)}개 · 판매+위탁`, 'green')}
+      ${reportKpi('당월 입고', wonShort(totals.inA), `${fmt(totals.inQ)}개`, 'cyan')}
+      ${reportKpi('회전일수', data.turnMed === null ? '측정불가' : daysCappedText(data.turnMed), `${data.measured}개 코드 중앙값`, 'orange')}
+      ${reportKpi('자본묶임', data.tiedCap ? wonShort(data.tiedCap) : '없음', `${data.tiedRows.length}개 코드`, 'pink')}
+      ${reportKpi('당월 손실', `${fmt(totals.lossQ)}개`, totals.lossA ? wonShort(totals.lossA) : '금액 없음', 'red')}
+    </div>
+    <section class="report-section">
+      <div class="report-section-head"><h3>1. 이번 달 결론</h3><span>자동 인사이트 상위 5개</span></div>
+      <ol class="report-insights">${insightHtml}</ol>
+    </section>
+    <div class="report-grid-2">
+      <section class="report-section">
+        <div class="report-section-head"><h3>2. 전월 대비 변화 TOP 5</h3><span>절대 변동액 기준</span></div>
+        ${reportSimpleTable([
+          {label:'코드', html:r=>`<strong>${reportEsc(r.code)}</strong>`},
+          {label:'품목', html:r=>reportEsc(r.item)},
+          {label:'전월', num:true, html:r=>reportEsc(wonShort(r.prev))},
+          {label:'당월', num:true, html:r=>reportEsc(wonShort(r.cur))},
+          {label:'변화', num:true, html:r=>`<strong class="${r.delta>=0?'pos':'neg'}">${reportEsc(reportDelta(r.delta, r.pct))}</strong>`}
+        ], data.assetRows.slice(0,5), '전월 대비 변동이 없습니다.')}
+      </section>
+      <section class="report-section">
+        <div class="report-section-head"><h3>3. 당월 매입 TOP 5</h3><span>금액 기준</span></div>
+        ${reportSimpleTable([
+          {label:'코드', html:r=>`<strong>${reportEsc(r.code)}</strong>`},
+          {label:'품목', html:r=>reportEsc(r.item)},
+          {label:'수량', num:true, html:r=>`${fmt(r.qty)}개`},
+          {label:'금액', num:true, html:r=>`<strong>${reportEsc(wonShort(r.amount))}</strong>`}
+        ], data.inRows.slice(0,5), '당월 매입이 없습니다.')}
+      </section>
+      <section class="report-section">
+        <div class="report-section-head"><h3>4. 당월 판매 TOP 5</h3><span>판매+위탁 금액 기준</span></div>
+        ${reportSimpleTable([
+          {label:'코드', html:r=>`<strong>${reportEsc(r.code)}</strong>`},
+          {label:'품목', html:r=>reportEsc(r.item)},
+          {label:'수량', num:true, html:r=>`${fmt(r.qty)}개`},
+          {label:'금액', num:true, html:r=>`<strong>${reportEsc(wonShort(r.amount))}</strong>`}
+        ], data.outRows.slice(0,5), '당월 판매/위탁 출고가 없습니다.')}
+      </section>
+      <section class="report-section">
+        <div class="report-section-head"><h3>5. 조치 필요 목록</h3><span>손실 · 품절 · 정체</span></div>
+        ${reportSimpleTable([
+          {label:'구분', html:r=>`<span class="report-badge">${reportEsc(r.type)}</span>`},
+          {label:'코드', html:r=>`<strong>${reportEsc(r.code)}</strong>`},
+          {label:'품목', html:r=>reportEsc(r.item)},
+          {label:'지표', num:true, html:r=>reportEsc(r.metric)},
+          {label:'권장 액션', html:r=>reportEsc(r.action)}
+        ], actionRows, '긴급 조치 항목이 없습니다.')}
+      </section>
+    </div>
+  `;
+}
 document.getElementById('stkSearch').addEventListener('input', renderStockList);
 document.getElementById('stkFilter').addEventListener('change', renderStockList);
 
@@ -3940,10 +4523,11 @@ document.getElementById('stkSearch').addEventListener('input', renderStockList);
 document.getElementById('stkFilter').addEventListener('change', renderStockList);
 
 document.querySelectorAll('#topTabs .tab').forEach(x=>x.classList.remove('on')); t.classList.add('on'); const v=t.dataset.view;
-  const views = ['summary','monthly','compare','tiedup','bycode','bytab','gijun','stock'];
+  const views = ['summary','report','monthly','compare','tiedup','bycode','bytab','gijun','stock'];
   for (const vn of views){ const el = document.getElementById('view-'+vn); if (el) el.style.display = v===vn ? 'block' : 'none'; }
   // 탭 진입 시 필요한 렌더링 트리거
   if (v === 'monthly' && typeof renderMonthlyView === 'function') setTimeout(renderMonthlyView, 100);
+  if (v === 'report' && typeof renderReportView === 'function') setTimeout(renderReportView, 100);
   if (v === 'compare' && typeof initCompareTab === 'function') setTimeout(initCompareTab, 100);
   if (v === 'stock' && typeof renderStock === 'function') setTimeout(() => { renderStock(); setTimeout(() => { if (chartStkGroup) chartStkGroup.resize(); if (chartStkStatus) chartStkStatus.resize(); }, 50); }, 100);
   if (v === 'tiedup' && typeof renderSummary === 'function') setTimeout(renderSummary, 100);
