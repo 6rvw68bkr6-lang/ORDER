@@ -1239,7 +1239,7 @@ footer { color:#64748b !important; }
     </div>
     <div class="row2 summary-flow">
       <div class="panel summary-top-panel"><h3>당월 매입 TOP 5 (금액 기준)</h3><div class="ph-sub">전월 입고금액과 당월 입고금액을 묶음 막대로 비교</div><div class="summary-large-chart summary-column-chart"><canvas id="topInAmountChart"></canvas></div><table id="topInTable" class="summary-compare-table summary-detail-table"><thead><tr><th>#</th><th>탭</th><th>품목</th><th class="num">전월금액</th><th class="num">당월금액</th><th class="num">증감</th><th class="num">수량</th></tr></thead><tbody></tbody></table></div>
-      <div class="panel summary-top-panel"><h3>당월 판매 TOP 5 (금액 기준)</h3><div class="ph-sub">전월 판매금액과 당월 판매금액을 묶음 막대로 비교</div><div class="summary-large-chart summary-column-chart"><canvas id="topSalAmountChart"></canvas></div><table id="topSalTable" class="summary-compare-table summary-detail-table"><thead><tr><th>#</th><th>탭</th><th>품목</th><th class="num">전월금액</th><th class="num">당월금액</th><th class="num">증감</th><th class="num">수량</th></tr></thead><tbody></tbody></table></div>
+      <div class="panel summary-top-panel"><h3>당월 판매 TOP 5 (판매+위탁 금액 기준)</h3><div class="ph-sub">전월 판매+위탁금액과 당월 판매+위탁금액을 묶음 막대로 비교</div><div class="summary-large-chart summary-column-chart"><canvas id="topSalAmountChart"></canvas></div><table id="topSalTable" class="summary-compare-table summary-detail-table"><thead><tr><th>#</th><th>탭</th><th>품목</th><th class="num">전월금액</th><th class="num">당월금액</th><th class="num">증감</th><th class="num">수량</th></tr></thead><tbody></tbody></table></div>
     </div>
     <div class="row2">
       <div class="panel"><h3>당월 손실 발생 탭</h3><div class="ph-sub">불량+무상+폐기 수량이 발생한 탭만 표시</div><table id="lossTable"><thead><tr><th>#</th><th>탭</th><th>품목</th><th class="num">손실 수량</th></tr></thead><tbody></tbody></table></div>
@@ -2393,7 +2393,7 @@ function renderSummary(){
   downs.forEach((x,i)=>{ const pct=x.prev?(x.d/x.prev*100).toFixed(1):'—'; dtb.insertAdjacentHTML('beforeend', `<tr><td>${i+1}</td><td><strong>${x.code}</strong> <span class="pill ${x.disp==='반제품'?'warn':'ok'}">${x.disp}</span></td><td>${x.item}</td><td>${compareBars(x.prev, x.cur, 'pink')}</td><td class="num"><span style="color:var(--magenta); font-weight:600">${wonShort(x.d)}</span><br/><span style="font-size:10px; color:var(--muted)">${pct}%</span></td></tr>`); });
   if (!downs.length) dtb.innerHTML='<tr><td colspan="5" style="color:var(--muted); text-align:center; padding:14px">감소 없음</td></tr>';
   const ins=[],sals=[];
-  for (const r of GIJUN){ const code=r[0]; const meta=LOOKUP[code]; const m=codeMonth(code,mi); const pm=mi>0?codeMonth(code,mi-1):null; if (!m) continue; if (m.ina>0) ins.push({code, item:meta.item, disp:meta.display, q:m.inq, pq:pm?pm.inq:0, v:m.ina, pv:pm?pm.ina:0}); if (m.sala>0) sals.push({code, item:meta.item, disp:meta.display, q:m.salq, pq:pm?pm.salq:0, v:m.sala, pv:pm?pm.sala:0}); }
+  for (const r of GIJUN){ const code=r[0]; const meta=LOOKUP[code]; const m=codeMonth(code,mi); const pm=mi>0?codeMonth(code,mi-1):null; if (!m) continue; if (m.ina>0) ins.push({code, item:meta.item, disp:meta.display, q:m.inq, pq:pm?pm.inq:0, v:m.ina, pv:pm?pm.ina:0}); const outValue=(m.sala||0)+(m.cona||0); const prevOutValue=pm?((pm.sala||0)+(pm.cona||0)):0; const outQty=(m.salq||0)+(m.conq||0); const prevOutQty=pm?((pm.salq||0)+(pm.conq||0)):0; if (outValue>0) sals.push({code, item:meta.item, disp:meta.display, q:outQty, pq:prevOutQty, v:outValue, pv:prevOutValue}); }
   ins.sort((a,b)=>b.v-a.v); sals.sort((a,b)=>b.v-a.v);
   const topIns=ins.slice(0,5), topSals=sals.slice(0,5);
   const renderTopAmountChart = (canvasId, oldChart, rows, tone) => {
@@ -2435,7 +2435,7 @@ function renderSummary(){
   if (!ins.length) itb.innerHTML='<tr><td colspan="7" style="color:var(--muted); text-align:center; padding:14px">매입 없음</td></tr>';
   const stb=document.querySelector('#topSalTable tbody'); stb.innerHTML='';
   topSals.forEach((x,i)=>{ const d=x.v-x.pv; stb.insertAdjacentHTML('beforeend', `<tr><td>${i+1}</td><td><strong>${x.code}</strong> <span class="pill ${x.disp==='반제품'?'warn':'ok'}">${x.disp}</span></td><td>${x.item}</td><td class="num">${wonShort(x.pv)}</td><td class="num"><strong>${wonShort(x.v)}</strong></td><td class="num"><span style="color:${d>=0?'var(--green)':'var(--magenta)'}; font-weight:700">${d>=0?'+':''}${wonShort(d)}</span></td><td class="num">${fmt(x.q)}개</td></tr>`); });
-  if (!sals.length) stb.innerHTML='<tr><td colspan="7" style="color:var(--muted); text-align:center; padding:14px">판매 없음</td></tr>';
+  if (!sals.length) stb.innerHTML='<tr><td colspan="7" style="color:var(--muted); text-align:center; padding:14px">판매/위탁 없음</td></tr>';
   const loss=[];
   for (const r of GIJUN){ const code=r[0]; const meta=LOOKUP[code]; const m=codeMonth(code,mi); if (m&&m.lossq>0) loss.push({code, item:meta.item, q:m.lossq}); }
   loss.sort((a,b)=>b.q-a.q);
