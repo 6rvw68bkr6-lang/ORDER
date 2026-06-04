@@ -662,6 +662,211 @@ footer { color:#64748b !important; }
   border-color:rgba(96,165,250,0.22);
   background:rgba(96,165,250,0.08);
 }
+.monthly-turn-panel .bigchart {
+  height:320px;
+}
+.turn-summary {
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:10px;
+  margin-top:12px;
+  padding:11px 13px;
+  border-radius:10px;
+  border:1px solid rgba(96,165,250,0.22);
+  background:rgba(96,165,250,0.08);
+  color:#cbd5e1;
+  font-size:12px;
+  line-height:1.45;
+}
+.turn-summary strong {
+  color:#fff;
+  font-size:13px;
+}
+.turn-summary span {
+  color:#94a3b8;
+}
+.turn-reasons {
+  margin-top:10px;
+  padding:12px 13px;
+  border-radius:10px;
+  border:1px solid rgba(148,163,184,0.14);
+  background:rgba(15,23,42,0.56);
+  color:#cbd5e1;
+}
+.turn-reason-head {
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:8px;
+}
+.turn-reason-head strong {
+  display:block;
+  color:#fff;
+  font-size:13px;
+}
+.turn-reason-head span {
+  display:block;
+  margin-top:3px;
+  color:#94a3b8;
+  font-size:11px;
+}
+.turn-reason-kpi {
+  flex:0 0 auto;
+  padding:7px 10px;
+  border-radius:999px;
+  background:rgba(96,165,250,0.12);
+  color:#bfdbfe;
+  font-size:12px;
+  font-weight:800;
+  white-space:nowrap;
+}
+.turn-reason-kpi.bad {
+  background:rgba(239,68,68,0.12);
+  color:#fecaca;
+}
+.turn-reason-kpi.good {
+  background:rgba(34,197,94,0.12);
+  color:#bbf7d0;
+}
+.turn-reason-note {
+  margin-bottom:8px;
+  color:#94a3b8;
+  font-size:11.5px;
+  line-height:1.5;
+}
+.turn-reason-table {
+  width:100%;
+  border-collapse:collapse;
+}
+.turn-reason-table th,
+.turn-reason-table td {
+  padding:8px 7px;
+  border-bottom:1px solid rgba(148,163,184,0.12);
+  font-size:11.5px;
+}
+.turn-reason-table th {
+  color:#7f91ad;
+  font-weight:800;
+}
+.turn-reason-table td {
+  color:#dbeafe;
+}
+.turn-reason-table .reason-muted {
+  color:#94a3b8;
+  font-size:10.5px;
+}
+.calc-guide {
+  margin-top:10px;
+  border:1px solid rgba(148,163,184,0.14);
+  border-radius:10px;
+  background:rgba(15,23,42,0.45);
+  color:#cbd5e1;
+  font-size:12px;
+  line-height:1.55;
+  overflow:hidden;
+}
+.calc-guide summary {
+  cursor:pointer;
+  list-style:none;
+  padding:10px 13px;
+  color:#dbeafe;
+  font-weight:700;
+}
+.calc-guide summary::-webkit-details-marker {
+  display:none;
+}
+.calc-guide summary::after {
+  content:'보기';
+  float:right;
+  color:#93c5fd;
+  font-size:11px;
+  font-weight:700;
+}
+.calc-guide[open] summary::after {
+  content:'접기';
+}
+.calc-guide div {
+  padding:0 13px 10px;
+  color:#94a3b8;
+}
+.calc-guide div:first-of-type {
+  padding-top:2px;
+  color:#e0f2fe;
+  font-weight:700;
+}
+.turn-group-guide {
+  margin-top:10px;
+}
+.turn-group-caption {
+  padding:0 13px 10px;
+  color:#93c5fd;
+  font-size:11.5px;
+  font-weight:700;
+}
+.turn-group-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  padding:0 13px 13px;
+}
+.turn-group-card {
+  border:1px solid rgba(148,163,184,0.12);
+  border-radius:8px;
+  background:rgba(255,255,255,0.035);
+  overflow:hidden;
+}
+.turn-group-card h4 {
+  margin:0;
+  padding:9px 10px;
+  color:#fff;
+  font-size:12px;
+  border-bottom:1px solid rgba(148,163,184,0.12);
+}
+.turn-group-card.major h4 {
+  color:#bfdbfe;
+}
+.turn-group-card.other h4 {
+  color:#fde68a;
+}
+.turn-group-table {
+  width:100%;
+  border-collapse:collapse;
+}
+.turn-group-table th,
+.turn-group-table td {
+  padding:7px 8px;
+  border-bottom:1px solid rgba(148,163,184,0.09);
+  font-size:11px;
+}
+.turn-group-table th {
+  color:#7f91ad;
+  font-weight:800;
+}
+.turn-group-table td {
+  color:#dbeafe;
+}
+.turn-group-table tr:last-child td {
+  border-bottom:0;
+}
+.turn-group-table .tab-code {
+  color:#fff;
+  font-weight:900;
+}
+.turn-group-table .tab-name {
+  color:#94a3b8;
+  font-size:10px;
+  margin-top:2px;
+}
+.turn-group-table .reason-muted {
+  color:#94a3b8;
+}
+@media (max-width: 900px) {
+  .turn-group-grid {
+    grid-template-columns:1fr;
+  }
+}
 
 /* Tied-up capital tab and drilldown dark polish */
 #view-tiedup .panel {
@@ -1051,9 +1256,9 @@ footer { color:#64748b !important; }
     </div>
     <div class="row2-12">
       <div class="panel monthly-flow-panel"><h3>월별 입고 vs 출고 균형</h3><div class="ph-sub">입고금액과 출고금액을 나란히 비교하고, 출고율(출고÷입고)로 재고 누적 여부를 확인</div><div class="chartbox bigchart monthly-flow-chart"><canvas id="monthlyFlowChart"></canvas></div><div class="flow-summary" id="monthlyFlowSummary"></div></div>
-      <div class="panel"><h3>📊 월별 회전일수 추이 (중앙값)</h3><div class="ph-sub">회전이 개선되는 추세인지 악화되는지</div><div class="chartbox bigchart"><canvas id="monthlyTurnChart"></canvas></div></div>
+      <div class="panel monthly-turn-panel"><h3>📊 월별 회전일수 추이 (중앙값)</h3><div class="ph-sub">주요품목과 기타품목을 나눠 회전 추세를 확인</div><div class="chartbox bigchart"><canvas id="monthlyTurnChart"></canvas></div><div class="turn-summary" id="monthlyTurnSummary"></div><details class="calc-guide turn-group-guide"><summary>품목 그룹 보기</summary><div id="monthlyTurnGroups"></div></details><div class="turn-reasons" id="monthlyTurnReasons"></div><details class="calc-guide"><summary>계산 방식 보기</summary><div>코드별 회전일수 = 기말 재고수량 ÷ 최근 3개월 평균 출고수량 × 30일</div><div>각 선은 그룹별 코드 회전일수의 중앙값입니다. 극단적으로 오래 묶인 코드 1개가 전체 추세를 왜곡하지 않도록 평균이 아니라 중앙값을 씁니다.</div><div>주요품목은 설정값이 없으면 최근 계산월 기준 최근 3개월 출고금액 상위 5개 코드로 자동 선정합니다.</div><div>해당 월에 출고가 잡힌 코드가 재고 보유 코드의 40% 미만이면 부분 입력월로 보고 그래프에서 제외합니다.</div></details></div>
     </div>
-    <div class="panel"><h3>📋 월별 핵심 지표 표</h3><div class="ph-sub">한 화면에 12개월 변동 요약</div><table id="monthlyTable"><thead><tr><th>월</th><th class="num">자산총액</th><th class="num">매출</th><th class="num">입고</th><th class="num">손실</th><th class="num">회전(중앙값)</th><th class="num">자본묶임</th></tr></thead><tbody></tbody></table></div>
+    <div class="panel"><h3>📋 월별 핵심 지표 표</h3><div class="ph-sub">한 화면에 12개월 변동 요약</div><table id="monthlyTable"><thead><tr><th>월</th><th class="num">자산총액</th><th class="num">매출</th><th class="num">입고</th><th class="num">손실</th><th class="num">전체회전</th><th class="num">주요회전</th><th class="num">기타회전</th><th class="num">자본묶임</th></tr></thead><tbody></tbody></table></div>
   </div>
 
   <!-- ============ 자본묶임 탭 ============ -->
@@ -1233,6 +1438,8 @@ footer { color:#64748b !important; }
 window.SCM_CONFIG = {
   sheetId: '1PLgQN_5bBXiQQyz-u8RM3EUhgVl6OPrYVRAVdsDLp3w',
   productCodes: ['DW','PH','MB','MH','FB-I','FB-G','FBB','FH','FS','FC','MX','SC','TG','FT','MS','MA','ETC','FU/FC','FS/FM','ID'],
+  // 비워두면 최근 계산월 기준 최근 3개월 출고금액 상위 5개를 주요품목으로 자동 선정합니다.
+  majorCodes: [],
   manufacturerHints: {
     'DW': ['TAI RU'],
     'PH': ['LIDIAN'],
@@ -2899,6 +3106,8 @@ function renderMonthlyView(){
     let inA = 0, outA = 0, lossQ = 0;
     const daysArr = [];
     let tiedCap = 0;
+    let stockCodeCount = 0;
+    let outCodeCount = 0;
     for (const r of GIJUN){
       const code = r[0];
       const m = codeMonth(code, mi); if (!m) continue;
@@ -2908,6 +3117,8 @@ function renderMonthlyView(){
       inA += m.ina || 0;
       outA += (m.sala || 0) + (m.cona || 0);
       lossQ += m.lossq || 0;
+      if ((m.endq || 0) > 0) stockCodeCount++;
+      if (((m.salq || 0) + (m.conq || 0) > 0) || ((m.sala || 0) + (m.cona || 0) > 0)) outCodeCount++;
       const sp = codeMonthSplit(code, mi);
       if (sp){ sangA += sp.sang.enda; wonjA += sp.wonj.enda; }
       const d = codeDaysOfInventory(code, mi);
@@ -2916,8 +3127,59 @@ function renderMonthlyView(){
         tiedCap += m.enda * (Math.min(d, 1095) / 365);
       }
     }
-    return { mi, asset, sangA, wonjA, revSal, revCon, rev: revSal+revCon, inA, outA, lossQ, turnMed: median(daysArr), tiedCap };
+    const minOutCodes = stockCodeCount ? Math.max(3, Math.ceil(stockCodeCount * 0.4)) : 0;
+    const turnRaw = median(daysArr);
+    const turnReliable = ACTIVE_MASK[mi] && stockCodeCount > 0 && outCodeCount >= minOutCodes;
+    return { mi, asset, sangA, wonjA, revSal, revCon, rev: revSal+revCon, inA, outA, lossQ, turnMed: turnReliable ? turnRaw : null, turnRaw, tiedCap: turnReliable ? tiedCap : null, stockCodeCount, outCodeCount, minOutCodes, turnReliable };
   });
+  let referenceMonth = null;
+  for (const d of monthData){ if (d.turnReliable) referenceMonth = d; }
+  if (!referenceMonth){ for (const d of monthData){ if (ACTIVE_MASK[d.mi]) referenceMonth = d; } }
+  const referenceMi = referenceMonth ? referenceMonth.mi : SELECTED_MONTH_IDX;
+  const configuredMajorCodes = ((window.SCM_CONFIG && Array.isArray(window.SCM_CONFIG.majorCodes)) ? window.SCM_CONFIG.majorCodes : [])
+    .map(c=>String(c || '').trim())
+    .filter(c=>LOOKUP[c]);
+  function codeRecentOutAmount(code, mi, lookback){
+    let total = 0;
+    for (let k = Math.max(0, mi - (lookback || 3) + 1); k <= mi; k++){
+      if (!ACTIVE_MASK[k]) continue;
+      const m = codeMonth(code, k);
+      if (!m) continue;
+      total += (m.sala || 0) + (m.cona || 0);
+    }
+    return total;
+  }
+  const autoMajorCodes = GIJUN
+    .map(r=>({ code:r[0], amount:codeRecentOutAmount(r[0], referenceMi, 3), stock:(codeMonth(r[0], referenceMi)||{}).enda || 0 }))
+    .filter(r=>r.amount > 0 || r.stock > 0)
+    .sort((a,b)=>(b.amount - a.amount) || (b.stock - a.stock))
+    .slice(0, 5)
+    .map(r=>r.code);
+  const majorCodes = configuredMajorCodes.length ? configuredMajorCodes : autoMajorCodes;
+  const majorCodeSet = new Set(majorCodes);
+  const otherCodes = GIJUN.map(r=>r[0]).filter(code=>!majorCodeSet.has(code));
+  const majorSourceText = configuredMajorCodes.length
+    ? `설정 주요품목 ${majorCodes.join(', ')}`
+    : `자동 주요품목 ${majorCodes.join(', ')} · 기준 ${MONTHS[referenceMi]} 최근 3개월 출고금액 상위 5개`;
+  function groupTurnMetrics(codes, mi){
+    const arr = [];
+    let stockCodeCount = 0;
+    let outCodeCount = 0;
+    for (const code of codes){
+      const m = codeMonth(code, mi);
+      if (!m) continue;
+      if ((m.endq || 0) > 0) stockCodeCount++;
+      if (((m.salq || 0) + (m.conq || 0) > 0) || ((m.sala || 0) + (m.cona || 0) > 0)) outCodeCount++;
+      const d = codeDaysOfInventory(code, mi);
+      if (d !== null) arr.push(d);
+    }
+    const minOutCodes = stockCodeCount ? Math.max(stockCodeCount >= 5 ? 2 : 1, Math.ceil(stockCodeCount * 0.4)) : 0;
+    const turnRaw = median(arr);
+    const turnReliable = ACTIVE_MASK[mi] && stockCodeCount > 0 && outCodeCount >= minOutCodes;
+    return { mi, turnMed: turnReliable ? turnRaw : null, turnRaw, stockCodeCount, outCodeCount, minOutCodes, turnReliable };
+  }
+  const majorTurnData = MONTHS.map((_, mi)=>groupTurnMetrics(majorCodes, mi));
+  const otherTurnData = MONTHS.map((_, mi)=>groupTurnMetrics(otherCodes, mi));
   // 1) 매출 추이 (스택바 + 라인)
   if (chartMRev) chartMRev.destroy();
   chartMRev = new Chart(document.getElementById('monthlyRevChart'), {
@@ -2982,15 +3244,134 @@ function renderMonthlyView(){
   chartMTurn = new Chart(document.getElementById('monthlyTurnChart'), {
     type:'line',
     data:{labels:MONTHS, datasets:[
-      { label:'중앙 회전일수', data: monthData.map(d=>d.turnMed), borderColor:'#3a6df0', backgroundColor:'rgba(58,109,240,0.15)', fill:true, tension:0.3, pointRadius:4, pointBackgroundColor: monthData.map(d=>d.turnMed >= 180 ? '#ef4444' : d.turnMed >= 90 ? '#f59e0b' : '#22c55e'), datalabels: dlbl('line', (v)=>v!==null?v.toFixed(0)+'일':'') }
+      { label:'주요품목', data: majorTurnData.map(d=>d.turnMed), borderColor:'#60a5fa', backgroundColor:'rgba(96,165,250,0.12)', fill:false, tension:0.3, spanGaps:false, borderWidth:3, pointRadius: majorTurnData.map(d=>d.turnMed === null ? 0 : 4), pointBackgroundColor:'#60a5fa', datalabels: dlbl('line', (v)=>v!==null?v.toFixed(0)+'일':'') },
+      { label:'기타품목', data: otherTurnData.map(d=>d.turnMed), borderColor:'#f59e0b', backgroundColor:'rgba(245,158,11,0.10)', fill:false, tension:0.3, spanGaps:false, borderWidth:3, pointRadius: otherTurnData.map(d=>d.turnMed === null ? 0 : 4), pointBackgroundColor:'#f59e0b', datalabels: dlbl('line', (v)=>v!==null?v.toFixed(0)+'일':'') }
     ]},
-    options: withLabelRoom({ responsive:true, maintainAspectRatio:false, plugins:{ legend:{display:false}, tooltip:{ callbacks:{ label:c=>` ${c.parsed.y!=null?c.parsed.y.toFixed(0)+'일':'데이터 없음'}` }}}, scales:{ y:{ title:{display:true, text:'일'}, ticks:{ callback:v=>v.toFixed(0)+'일' }}}})
+    options: withLabelRoom({ responsive:true, maintainAspectRatio:false, plugins:{ legend:{display:true, position:'bottom', labels:{color:'#cbd5e1', font:{size:11, weight:'700'}, boxWidth:12, padding:10}}, tooltip:{ callbacks:{ label:c=>` ${c.dataset.label}: ${c.parsed.y!=null?c.parsed.y.toFixed(0)+'일':'데이터 없음'}` }}}, scales:{ y:{ title:{display:true, text:'일'}, ticks:{ callback:v=>v.toFixed(0)+'일' }}}})
   });
+  const turnSummaryEl = document.getElementById('monthlyTurnSummary');
+  if (turnSummaryEl){
+    const labelRange = (items) => {
+      if (!items.length) return '';
+      if (items.length === 1) return MONTHS[items[0].mi];
+      return `${MONTHS[items[0].mi]}~${MONTHS[items[items.length - 1].mi]}`;
+    };
+    const reliableMonths = monthData.filter(d=>d.turnReliable);
+    const partialMonths = monthData.filter(d=>ACTIVE_MASK[d.mi] && !d.turnReliable);
+    const emptyMonths = monthData.filter(d=>!ACTIVE_MASK[d.mi] && d.stockCodeCount > 0);
+    const latestReliable = reliableMonths[reliableMonths.length - 1];
+    const partialText = partialMonths.length
+      ? ` · 제외 ${partialMonths.map(d=>`${MONTHS[d.mi]} 출고코드 ${d.outCodeCount}/${d.stockCodeCount}개(기준 ${d.minOutCodes}개 미만)`).join(', ')}`
+      : '';
+    const emptyText = emptyMonths.length ? ` · ${labelRange(emptyMonths)} 미입력월` : '';
+    turnSummaryEl.innerHTML = latestReliable
+      ? `<strong>계산대상 ${labelRange(reliableMonths)}</strong><span>최근 계산월 ${MONTHS[latestReliable.mi]} 전체 중앙값 ${latestReliable.turnMed.toFixed(0)}일 · ${majorSourceText}${partialText}${emptyText}</span>`
+      : `<strong>계산 가능한 월 없음</strong><span>출고 입력이 충분한 월이 생기면 회전일수 추이가 표시됩니다. ${majorSourceText}${partialText}${emptyText}</span>`;
+  }
+  const turnGroupsEl = document.getElementById('monthlyTurnGroups');
+  if (turnGroupsEl){
+    const groupRows = (codes) => {
+      if (!codes.length) return '<tr><td colspan="3" class="reason-muted">해당 그룹 없음</td></tr>';
+      return codes.map(code=>{
+        const meta = LOOKUP[code] || {};
+        const m = codeMonth(code, referenceMi) || {};
+        const recentOutAmount = codeRecentOutAmount(code, referenceMi, 3);
+        return `<tr><td><div class="tab-code">${code}</div><div class="tab-name">${meta.item || '-'}</div></td><td class="num">${wonShort(recentOutAmount)}</td><td class="num">${wonShort(m.enda || 0)}</td></tr>`;
+      }).join('');
+    };
+    turnGroupsEl.innerHTML = `
+      <div class="turn-group-caption">${majorSourceText}</div>
+      <div class="turn-group-grid">
+        <div class="turn-group-card major">
+          <h4>주요품목 ${majorCodes.length}개</h4>
+          <table class="turn-group-table">
+            <thead><tr><th>탭명</th><th class="num">최근 3개월 출고</th><th class="num">기준월 재고</th></tr></thead>
+            <tbody>${groupRows(majorCodes)}</tbody>
+          </table>
+        </div>
+        <div class="turn-group-card other">
+          <h4>기타품목 ${otherCodes.length}개</h4>
+          <table class="turn-group-table">
+            <thead><tr><th>탭명</th><th class="num">최근 3개월 출고</th><th class="num">기준월 재고</th></tr></thead>
+            <tbody>${groupRows(otherCodes)}</tbody>
+          </table>
+        </div>
+      </div>`;
+  }
+  const turnReasonsEl = document.getElementById('monthlyTurnReasons');
+  if (turnReasonsEl){
+    const activeMonths = monthData.filter(d=>ACTIVE_MASK[d.mi] && d.mi > 0);
+    const target = activeMonths[activeMonths.length - 1];
+    if (!target){
+      turnReasonsEl.innerHTML = '<div class="turn-reason-note">전월 대비 회전 변화 원인을 계산하려면 최소 2개월 이상의 출고 데이터가 필요합니다.</div>';
+    } else {
+      const prev = monthData[target.mi - 1];
+      const prevVal = prev.turnRaw;
+      const curVal = target.turnRaw;
+      const delta = (prevVal !== null && curVal !== null) ? curVal - prevVal : null;
+      const worsening = delta === null ? true : delta >= 0;
+      const rows = [];
+      for (const r of GIJUN){
+        const code = r[0];
+        const meta = LOOKUP[code] || {};
+        const pm = codeMonth(code, target.mi - 1);
+        const cm = codeMonth(code, target.mi);
+        if (!pm || !cm) continue;
+        const prevDays = codeDaysOfInventory(code, target.mi - 1);
+        const curDays = codeDaysOfInventory(code, target.mi);
+        if (prevDays === null || curDays === null) continue;
+        const prevAvg = codeAvgOutflow(code, target.mi - 1, 3);
+        const curAvg = codeAvgOutflow(code, target.mi, 3);
+        const prevOut = (pm.salq || 0) + (pm.conq || 0);
+        const curOut = (cm.salq || 0) + (cm.conq || 0);
+        const stockDelta = (cm.endq || 0) - (pm.endq || 0);
+        const dayDelta = curDays - prevDays;
+        if (Math.abs(dayDelta) < 1) continue;
+        const causes = [];
+        if (curOut === 0 && prevOut > 0) causes.push('당월 출고 0');
+        else if (curOut < prevOut) causes.push(`당월 출고 ${fmt(prevOut)}→${fmt(curOut)}개`);
+        if (prevAvg > 0 && curAvg < prevAvg * 0.8) causes.push(`3개월 평균출고 ${prevAvg.toFixed(1)}→${curAvg.toFixed(1)}개`);
+        if (stockDelta > 0) causes.push(`재고 +${fmt(stockDelta)}개`);
+        if (!causes.length) causes.push('재고/출고 복합 요인');
+        rows.push({ code, item: meta.item || '', prevDays, curDays, dayDelta, prevAvg, curAvg, prevOut, curOut, stockDelta, causes });
+      }
+      const ranked = rows
+        .filter(r=>worsening ? r.dayDelta > 0 : r.dayDelta < 0)
+        .sort((a,b)=>worsening ? b.dayDelta - a.dayDelta : a.dayDelta - b.dayDelta)
+        .slice(0, 5);
+      const statusText = target.turnReliable
+        ? '그래프 반영월'
+        : `그래프 제외월 · 출고코드 ${target.outCodeCount}/${target.stockCodeCount}개(기준 ${target.minOutCodes}개)`;
+      const kpiClass = delta === null ? '' : delta >= 0 ? 'bad' : 'good';
+      const kpiText = delta === null
+        ? '비교 불가'
+        : `${prevVal.toFixed(0)}일 → ${curVal.toFixed(0)}일 (${delta >= 0 ? '+' : ''}${delta.toFixed(0)}일)`;
+      const tableRows = ranked.length
+        ? ranked.map(r=>`<tr><td><strong>${r.code}</strong><div class="reason-muted">${r.item}</div></td><td class="num">${r.prevDays.toFixed(0)}→${r.curDays.toFixed(0)}일</td><td class="num" style="color:${r.dayDelta >= 0 ? '#fecaca' : '#bbf7d0'}">${r.dayDelta >= 0 ? '+' : ''}${r.dayDelta.toFixed(0)}일</td><td>${r.causes.join('<br>')}</td></tr>`).join('')
+        : '<tr><td colspan="4" class="reason-muted">큰 변화 코드가 없습니다.</td></tr>';
+      const note = target.turnReliable
+        ? `${MONTHS[target.mi]}은 계산 기준을 충족했습니다. 아래는 전월 대비 회전 변화에 가장 크게 기여한 코드입니다.`
+        : `${MONTHS[target.mi]}은 출고 입력이 부족해 공식 추이에서는 제외했습니다. 다만 원자료 기준으로 보면 아래 코드들의 출고 감소가 회전일수 상승처럼 보이게 만듭니다.`;
+      turnReasonsEl.innerHTML = `
+        <div class="turn-reason-head">
+          <div><strong>${MONTHS[target.mi - 1]} → ${MONTHS[target.mi]} 회전 변화 원인</strong><span>${statusText}</span></div>
+          <div class="turn-reason-kpi ${kpiClass}">${kpiText}</div>
+        </div>
+        <div class="turn-reason-note">${note}</div>
+        <table class="turn-reason-table">
+          <thead><tr><th>코드</th><th class="num">회전</th><th class="num">증감</th><th>주요 원인</th></tr></thead>
+          <tbody>${tableRows}</tbody>
+        </table>`;
+    }
+  }
   // 5) 월별 요약 표
   const mtb = document.querySelector('#monthlyTable tbody'); mtb.innerHTML='';
+  const turnCellFor = (d) => d.turnReliable
+    ? d.turnMed.toFixed(0)+'일'
+    : `<span title="출고 입력 코드 ${d.outCodeCount}/${d.stockCodeCount}개, 기준 ${d.minOutCodes}개 미만">입력 부족</span>`;
   for (const d of monthData){
-    const dim = (!ACTIVE_MASK[d.mi]) ? ' style="opacity:0.4"' : '';
-    mtb.insertAdjacentHTML('beforeend', `<tr${dim}><td><strong>${MONTHS[d.mi]}</strong></td><td class="num">${wonShort(d.asset)}</td><td class="num">${wonShort(d.rev)}</td><td class="num">${wonShort(d.inA)}</td><td class="num">${fmt(d.lossQ)}개</td><td class="num">${d.turnMed!==null?d.turnMed.toFixed(0)+'일':'—'}</td><td class="num">${wonShort(d.tiedCap)}</td></tr>`);
+    const dim = (!d.turnReliable) ? ' style="opacity:0.48"' : '';
+    mtb.insertAdjacentHTML('beforeend', `<tr${dim}><td><strong>${MONTHS[d.mi]}</strong></td><td class="num">${wonShort(d.asset)}</td><td class="num">${wonShort(d.rev)}</td><td class="num">${wonShort(d.inA)}</td><td class="num">${fmt(d.lossQ)}개</td><td class="num">${turnCellFor(d)}</td><td class="num">${turnCellFor(majorTurnData[d.mi])}</td><td class="num">${turnCellFor(otherTurnData[d.mi])}</td><td class="num">${wonShort(d.tiedCap)}</td></tr>`);
   }
 }
 
