@@ -1742,20 +1742,20 @@ footer { color:#64748b !important; }
 
   <div id="view-tiedup" style="display:none">
     <div class="panel" style="border-left:3px solid var(--magenta)"><h3>자본 묶임 종합 분석 <span style="font-size:11px; color:var(--muted); font-weight:400">— 안 팔리는 재고에 자본이 얼마나 묶여 있는가</span></h3>
-      <div class="ph-sub">코드 단위로 분석 후, 행을 클릭하면 어떤 옵션이 정체 원인인지 옵션 단위 드릴다운으로 확인. "이 옵션만 빼면 코드 회전이 정상" 같은 허수 검증 가능</div>
+      <div class="ph-sub">옵션 단위 회전을 먼저 계산한 뒤 코드별로 합산합니다. 행을 클릭하면 어떤 옵션이 자본을 묶고 있는지 드릴다운으로 확인합니다.</div>
       <div style="margin-top:10px; padding:12px 14px; background:var(--bg); border-radius:6px; font-size:12px; line-height:1.7; border:1px solid var(--line)">
         <strong style="color:var(--text)">자본묶임 지수 계산법</strong><br/>
-        공식: <code style="background:var(--card); padding:2px 8px; border-radius:4px; color:var(--text); border:1px solid var(--line); font-family:'JetBrains Mono', monospace; font-size:11px">재고금액 × (회전일수 ÷ 365일)</code><br/>
-        <span style="color:var(--muted)">= "이 재고가 1년치로 환산하면 얼마의 자본을 묶어두는가"</span><br/>
-        <strong>예시:</strong> 재고 2,097만원 × (1,707일 ÷ 365) ≈ <strong>9,805만원</strong> <span style="color:var(--muted)">(※ 5년 캡 적용 시 6,292만원)</span><br/>
-        <span style="color:var(--muted)">→ 회전이 1년보다 길면 1년치 환산 자본이 재고금액보다 커집니다. 회전이 1년 미만이면 작게 잡힘.</span><br/>
-        <strong>의미:</strong> 단순 우선순위 점수가 아니라, <strong>"이 재고를 정리하지 않으면 매년 묶이는 자본 환산값"</strong>. 회계적으로 <strong>기회비용(자본의 시간가치)</strong> 개념.
+        공식: <code style="background:var(--card); padding:2px 8px; border-radius:4px; color:var(--text); border:1px solid var(--line); font-family:'JetBrains Mono', monospace; font-size:11px">옵션 재고금액 × (옵션 회전일수 ÷ 365일)</code><br/>
+        <span style="color:var(--muted)">= 옵션별로 안 팔리는 재고가 얼마나 오래 자본을 묶는지 계산한 뒤 코드별로 합산합니다.</span><br/>
+        <strong>예시:</strong> 옵션 재고 300만원 × (730일 ÷ 365) = <strong>600만원</strong><br/>
+        <span style="color:var(--muted)">→ 최근 출고가 없는 옵션은 장기 정체로 보고 3년치 상한으로 환산합니다. 회전이 빠른 옵션은 자본묶임에 작게 반영됩니다.</span><br/>
+        <strong>의미:</strong> 코드 전체 평균이 아니라, <strong>"코드 안에서 실제로 안 팔리는 옵션이 묶고 있는 자본"</strong>을 보는 지표입니다.
       </div>
     </div>
-    <div class="panel"><h3>💰 자본 묶임 TOP <span style="font-size:11px; color:var(--muted); font-weight:400">— 행 클릭 시 옵션 드릴다운</span></h3><div class="ph-sub">실제 재고금액 + 회전일수 + <strong>이익율</strong>. 적자 코드의 묶임은 "실제 손실 추정"으로 환산 (자본묶임 × |음수 이익율|)</div><div id="tiedUpSummary" style="margin-bottom:8px"></div><table id="tiedUpTable"><thead><tr><th>#</th><th>코드</th><th>품목</th><th class="num">재고금액</th><th class="num">회전기간</th><th class="num">상태</th><th class="num">이익율</th><th class="num">자본묶임</th><th class="num">실제 손실</th><th></th></tr></thead><tbody></tbody></table></div>
+    <div class="panel"><h3>💰 자본 묶임 TOP <span style="font-size:11px; color:var(--muted); font-weight:400">— 행 클릭 시 옵션 드릴다운</span></h3><div class="ph-sub">옵션별 재고금액 + 옵션별 회전일수 + <strong>이익율</strong>. 적자 코드의 묶임은 "실제 손실 추정"으로 환산 (자본묶임 × |음수 이익율|)</div><div id="tiedUpSummary" style="margin-bottom:8px"></div><table id="tiedUpTable"><thead><tr><th>#</th><th>코드</th><th>품목</th><th class="num">재고금액</th><th class="num">옵션기준 회전</th><th class="num">상태</th><th class="num">이익율</th><th class="num">자본묶임</th><th class="num">실제 손실</th><th></th></tr></thead><tbody></tbody></table></div>
     <div class="row2">
-      <div class="panel"><h3>📦 과잉재고 (Excess Inventory)</h3><div class="ph-sub">카테고리별 정상 회전 기준 초과 코드 — 행 클릭 시 옵션 드릴다운</div><div id="excessSummary" style="margin-bottom:8px"></div><table id="excessTable"><thead><tr><th>코드</th><th>품목</th><th>카테고리</th><th class="num">재고</th><th class="num">회전</th><th class="num">상태</th></tr></thead><tbody></tbody></table></div>
-      <div class="panel"><h3>⚡ 품절 위험 · 재입고 시급</h3><div class="ph-sub">카테고리 정상 회전보다 빠르게 빠지는 코드</div><div id="stockoutSummary" style="margin-bottom:8px"></div><table id="stockoutTable"><thead><tr><th>코드</th><th>품목</th><th>카테고리</th><th class="num">재고</th><th class="num">회전</th><th class="num">소진예측</th></tr></thead><tbody></tbody></table></div>
+      <div class="panel"><h3>📦 과잉재고 (Excess Inventory)</h3><div class="ph-sub">옵션별 정상 회전 기준 초과 코드 — 행 클릭 시 옵션 드릴다운</div><div id="excessSummary" style="margin-bottom:8px"></div><table id="excessTable"><thead><tr><th>코드</th><th>품목</th><th>카테고리</th><th class="num">재고</th><th class="num">회전</th><th class="num">상태</th></tr></thead><tbody></tbody></table></div>
+      <div class="panel"><h3>⚡ 품절 위험 · 재입고 시급</h3><div class="ph-sub">옵션별 정상 회전보다 빠르게 빠지는 코드</div><div id="stockoutSummary" style="margin-bottom:8px"></div><table id="stockoutTable"><thead><tr><th>코드</th><th>품목</th><th>카테고리</th><th class="num">재고</th><th class="num">회전</th><th class="num">소진예측</th></tr></thead><tbody></tbody></table></div>
     </div>
   </div>
 
@@ -2478,6 +2478,63 @@ function codeDaysOfInventory(code, mi){
   if (!avgOut) return null;       // 정체: 무한대로 처리
   return (stock / avgOut) * 30;   // 월평균 × 30일/월
 }
+const TIED_CAP_DAYS = 1095; // 자본묶임 환산 상한: 3년치
+function recentActiveMonthIndexes(mi, lookback){
+  lookback = lookback || 3;
+  const arr = [];
+  for (let k = Math.max(0, mi - lookback + 1); k <= mi; k++){
+    if (ACTIVE_MASK[k]) arr.push(k);
+  }
+  return arr;
+}
+function optionRecentOutflow(o, mi, lookback){
+  const months = recentActiveMonthIndexes(mi, lookback || 3);
+  const total = months.reduce((s,k)=>s + (o.salq[k]||0) + (o.conq[k]||0), 0);
+  return { total, count: months.length, avg: months.length ? total / months.length : 0 };
+}
+function optionTiedDays(days){
+  return days === null || days === undefined ? TIED_CAP_DAYS : Math.min(days, TIED_CAP_DAYS);
+}
+function collectCodeOptionMetrics(code, mi){
+  const tab = DATA.tabs[code]; const meta = LOOKUP[code];
+  const m = codeMonth(code, mi);
+  if (!tab || !meta || !m) return null;
+  const th = thresholdsFor(meta.category);
+  const blocks = pickBlocks(code, tab);
+  const options = [];
+  for (const b of blocks){
+    for (const o of (b.options || [])){
+      const stockQ = o.endq[mi] || 0;
+      const stockA = o.enda[mi] || 0;
+      const flow = optionRecentOutflow(o, mi, 3);
+      const days = flow.avg > 0 ? (stockQ / flow.avg) * 30 : null;
+      const isTied = stockQ > 0 && stockA > 0 && (days === null || days >= th.warn);
+      const tiedCap = isTied ? stockA * (optionTiedDays(days) / 365) : 0;
+      const isStockout = stockQ > 0 && days !== null && days < th.ok;
+      options.push({
+        name:o.n, blockType:b.type, isInternal:isInternalBlockType(b.type),
+        stockQ, stockA, recentOut:flow.total, avgOut:flow.avg, days,
+        isTied, tiedCap, isStockout
+      });
+    }
+  }
+  const stockOptions = options.filter(o=>o.stockQ > 0 || o.stockA > 0);
+  const tiedOptions = options.filter(o=>o.isTied);
+  const stockoutOptions = options.filter(o=>o.isStockout);
+  const tiedCap = tiedOptions.reduce((s,o)=>s+o.tiedCap, 0);
+  const tiedStockQ = tiedOptions.reduce((s,o)=>s+o.stockQ, 0);
+  const tiedStockA = tiedOptions.reduce((s,o)=>s+o.stockA, 0);
+  const weightedDays = stockOptions.length && m.enda > 0
+    ? stockOptions.reduce((s,o)=>s + (o.stockA || 0) * optionTiedDays(o.days), 0) / m.enda
+    : codeDaysOfInventory(code, mi);
+  const tiedWeightedDays = tiedStockA > 0
+    ? tiedOptions.reduce((s,o)=>s + (o.stockA || 0) * optionTiedDays(o.days), 0) / tiedStockA
+    : null;
+  const worstDays = tiedOptions.length
+    ? tiedOptions.reduce((mx,o)=>Math.max(mx, optionTiedDays(o.days)), 0)
+    : null;
+  return { code, meta, month:m, options, stockOptions, tiedOptions, stockoutOptions, tiedCap, tiedStockQ, tiedStockA, weightedDays, tiedWeightedDays, worstDays };
+}
 // 최근 N개월간 한 번도 판매 없는 코드 = 데드스톡 후보
 function codeIsDeadstock(code, mi, lookback){
   lookback = lookback || 3;
@@ -2553,11 +2610,10 @@ function renderSummary(){
     const m = codeMonth(code, mi); if (!m) continue;
     const d = codeDaysOfInventory(code, mi);
     if (d !== null) daysArr.push(d);
-    if (d !== null && d >= 180 && m.enda > 0){
+    const optMetric = collectCodeOptionMetrics(code, mi);
+    if (optMetric && optMetric.tiedCap > 0){
       excessCount++;
-      // 캡: 1095일(3년) 이상은 1095로 고정 — 극단값 영향 차단
-      const cappedDays = Math.min(d, 1095);
-      tiedUpCap += m.enda * (cappedDays / 365);
+      tiedUpCap += optMetric.tiedCap;
     }
   }
   const med = median(daysArr);
@@ -2663,38 +2719,52 @@ function renderSummary(){
   for (const r of GIJUN){
     const code = r[0]; const meta = LOOKUP[code];
     const m = codeMonth(code, mi); if (!m) continue;
-    const d = codeDaysOfInventory(code, mi);
+    const optMetric = collectCodeOptionMetrics(code, mi);
+    const d = optMetric && optMetric.weightedDays !== null ? optMetric.weightedDays : codeDaysOfInventory(code, mi);
     const th = thresholdsFor(meta.category);
-    // 자본 묶임: 회전 측정 가능 + 재고금액 있는 코드 모두 — 단 정체(180일+ 또는 카테고리 warn+) 코드만 의미있음
-    if (d !== null && m.enda > 0){
-      const cappedDays = Math.min(d, 1095);
-      const tiedCap = m.enda * (cappedDays / 365);
-      // 카테고리 정체 기준(warn)을 넘으면 자본묶임 후보
-      if (d >= th.warn){
-        tiedUp.push({ code, item: meta.item, cat: meta.category, stockA: m.enda, days: d, tiedCap });
-      }
+    // 자본 묶임: 옵션별 회전으로 먼저 계산한 뒤 코드 단위로 합산
+    if (optMetric && optMetric.tiedCap > 0){
+      tiedUp.push({
+        code, item: meta.item, cat: meta.category,
+        stockA: m.enda, stockQ: m.endq,
+        days: optMetric.tiedWeightedDays || d,
+        tiedCap: optMetric.tiedCap,
+        tiedOptions: optMetric.tiedOptions.length,
+        topOption: optMetric.tiedOptions.slice().sort((a,b)=>b.tiedCap-a.tiedCap)[0]?.name || ''
+      });
     }
-    // 과잉재고: 카테고리 정체 기준(warn) 초과 또는 회전 측정 불가 + 재고 있음(정체)
-    if (m.enda > 0){
-      if (d === null && (m.endq||0) > 0){
-        // 회전 측정 불가 = 최근 3개월 출고 0 = 완전 정체
-        excess.push({ code, item: meta.item, cat: meta.category, stockQ: m.endq, days: null, status: '완전정체' });
-      } else if (d !== null && d >= th.warn){
-        const status = d >= th.warn * 2 ? '심각' : '정체';
-        excess.push({ code, item: meta.item, cat: meta.category, stockQ: m.endq, days: d, status });
-      }
+    // 과잉재고: 정체 옵션이 하나라도 있으면 코드 후보로 표시
+    if (optMetric && optMetric.tiedOptions.length){
+      const noOutCount = optMetric.tiedOptions.filter(o=>o.days === null).length;
+      const status = noOutCount
+        ? `${noOutCount}개 옵션 무출고`
+        : (optMetric.tiedWeightedDays >= th.warn * 2 ? '심각' : '정체');
+      excess.push({
+        code, item: meta.item, cat: meta.category,
+        stockQ: optMetric.tiedStockQ,
+        days: optMetric.tiedWeightedDays,
+        status,
+        optionCount: optMetric.tiedOptions.length
+      });
     }
-    // 품절 위험: 회전 측정 가능 + 카테고리 정상(ok) 미만 + 재고 있음 + 소진까지 30일 미만
-    if (d !== null && d < th.ok && (m.endq||0) > 0){
-      const daysLeft = d;  // = 현재재고 ÷ 최근평균출고 × 30
-      stockout.push({ code, item: meta.item, cat: meta.category, stockQ: m.endq, days: d, daysLeft });
+    // 품절 위험: 옵션별로 빠르게 빠지는 옵션이 있으면 후보로 표시
+    if (optMetric && optMetric.stockoutOptions.length){
+      const fastest = optMetric.stockoutOptions.slice().sort((a,b)=>a.days-b.days)[0];
+      stockout.push({
+        code, item: meta.item, cat: meta.category,
+        stockQ: optMetric.stockoutOptions.reduce((s,o)=>s+o.stockQ,0),
+        days: fastest.days,
+        daysLeft: fastest.days,
+        optionCount: optMetric.stockoutOptions.length,
+        topOption: fastest.name
+      });
     }
   }
   // 자본 묶임 정렬 + 렌더
   tiedUp.sort((a,b)=>b.tiedCap-a.tiedCap);
   const totalTied = tiedUp.reduce((s,r)=>s+r.tiedCap, 0);
   document.getElementById('tiedUpSummary').innerHTML = tiedUp.length
-    ? `<div style="background:#fef2f2; border-left:3px solid #dc2626; padding:8px 12px; border-radius:6px; font-size:12px"><strong style="color:#991b1b">총 ${won(totalTied)} 자본 묶임 · ${tiedUp.length}개 코드</strong> <span style="color:var(--muted)">정체된 코드의 1년치 환산 자본</span></div>`
+    ? `<div style="background:#fef2f2; border-left:3px solid #dc2626; padding:8px 12px; border-radius:6px; font-size:12px"><strong style="color:#991b1b">총 ${won(totalTied)} 자본 묶임 · ${tiedUp.length}개 코드</strong> <span style="color:var(--muted)">옵션별 정체를 합산한 환산 자본</span></div>`
     : `<div style="background:#dcfce7; border-left:3px solid #22c55e; padding:8px 12px; border-radius:6px; font-size:12px"><strong style="color:#166534">자본 묶임 없음</strong></div>`;
   const tuTb = document.querySelector('#tiedUpTable tbody'); tuTb.innerHTML='';
   if (!tiedUp.length){
@@ -2719,7 +2789,8 @@ function renderSummary(){
           realLossCell = '<td class="num" style="color:var(--muted)">·</td>';
         }
       }
-      tuTb.insertAdjacentHTML('beforeend', `<tr class="tiedup-row" data-code="${t.code}" title="클릭 시 옵션 드릴다운"><td>${i+1}</td><td><strong>${t.code}</strong></td><td>${t.item}</td><td class="num">${wonShort(t.stockA)}</td><td class="num">${daysCappedText(t.days)}</td><td class="num">${statusPill}</td>${profitCell}<td class="num"><strong style="color:#991b1b">${wonShort(t.tiedCap)}</strong> <span style="font-size:10px; color:var(--muted)">${pct}%</span></td>${realLossCell}<td></td></tr>`);
+      const optionHint = t.topOption ? `<div style="font-size:10px; color:var(--muted); margin-top:2px">정체 옵션 ${t.tiedOptions}개 · ${t.topOption}</div>` : '';
+      tuTb.insertAdjacentHTML('beforeend', `<tr class="tiedup-row" data-code="${t.code}" title="클릭 시 옵션 드릴다운"><td>${i+1}</td><td><strong>${t.code}</strong></td><td>${t.item}${optionHint}</td><td class="num">${wonShort(t.stockA)}</td><td class="num">${daysCappedText(t.days)}</td><td class="num">${statusPill}</td>${profitCell}<td class="num"><strong style="color:#991b1b">${wonShort(t.tiedCap)}</strong> <span style="font-size:10px; color:var(--muted)">${pct}%</span></td>${realLossCell}<td></td></tr>`);
     });
     // 행 클릭 → 옵션 드릴다운
     tuTb.querySelectorAll('.tiedup-row').forEach(r=>{
@@ -2738,7 +2809,7 @@ function renderSummary(){
     for (const e of excess.slice(0,12)){
       const status = turnStatusLabel(e.days, e.cat);
       const statusPill = `<span style="display:inline-block; padding:2px 8px; border-radius:10px; font-size:10px; font-weight:600; background:${status.bg}; color:${status.color}">${status.label}</span>`;
-      exTb.insertAdjacentHTML('beforeend', `<tr class="excess-row" data-code="${e.code}" title="클릭 시 옵션 드릴다운"><td><strong>${e.code}</strong></td><td>${e.item}</td><td><span class="dim" style="font-size:10px; color:var(--muted)">${e.cat}</span></td><td class="num">${fmt(e.stockQ)}개</td><td class="num">${daysCappedText(e.days)}</td><td class="num">${statusPill}</td></tr>`);
+      exTb.insertAdjacentHTML('beforeend', `<tr class="excess-row" data-code="${e.code}" title="클릭 시 옵션 드릴다운"><td><strong>${e.code}</strong></td><td>${e.item}<div style="font-size:10px; color:var(--muted); margin-top:2px">정체 옵션 ${e.optionCount||1}개</div></td><td><span class="dim" style="font-size:10px; color:var(--muted)">${e.cat}</span></td><td class="num">${fmt(e.stockQ)}개</td><td class="num">${daysCappedText(e.days)}</td><td class="num">${statusPill}</td></tr>`);
     }
     exTb.querySelectorAll('.excess-row').forEach(r=>{
       r.onclick = ()=> openDrill(r.dataset.code, mi);
@@ -2755,7 +2826,7 @@ function renderSummary(){
   } else {
     for (const s of stockout.slice(0,12)){
       const urgentCls = s.daysLeft < 15 ? 'pill bad' : 'pill warn';
-      soTb.insertAdjacentHTML('beforeend', `<tr><td><strong>${s.code}</strong></td><td>${s.item}</td><td><span class="dim" style="font-size:10px; color:var(--muted)">${s.cat}</span></td><td class="num">${fmt(s.stockQ)}개</td><td class="num">${s.days.toFixed(0)}일</td><td class="num"><span class="${urgentCls}">${s.daysLeft.toFixed(0)}일 후</span></td></tr>`);
+      soTb.insertAdjacentHTML('beforeend', `<tr><td><strong>${s.code}</strong></td><td>${s.item}<div style="font-size:10px; color:var(--muted); margin-top:2px">빠른 옵션 ${s.optionCount||1}개${s.topOption?` · ${s.topOption}`:''}</div></td><td><span class="dim" style="font-size:10px; color:var(--muted)">${s.cat}</span></td><td class="num">${fmt(s.stockQ)}개</td><td class="num">${s.days.toFixed(0)}일</td><td class="num"><span class="${urgentCls}">${s.daysLeft.toFixed(0)}일 후</span></td></tr>`);
     }
   }
   const byExp={};
@@ -3062,11 +3133,8 @@ function generateInsights(mi){
   function tiedCapAt(monthIdx){
     let cap = 0;
     for (const r of GIJUN){
-      const code = r[0]; const m = codeMonth(code, monthIdx); if (!m) continue;
-      const d = codeDaysOfInventory(code, monthIdx);
-      if (d !== null && d >= 180 && m.enda > 0){
-        cap += m.enda * (Math.min(d, 1095) / 365);
-      }
+      const metric = collectCodeOptionMetrics(r[0], monthIdx);
+      if (metric) cap += metric.tiedCap || 0;
     }
     return cap;
   }
@@ -3093,11 +3161,10 @@ function generateInsights(mi){
   // ----- 5. 가장 정체 심한 코드 TOP 1 (자본묶임 1위) -----
   const tiedList = [];
   for (const r of GIJUN){
-    const code = r[0]; const m = codeMonth(code, mi); if (!m) continue;
-    const d = codeDaysOfInventory(code, mi);
-    if (d !== null && d >= 180 && m.enda > 0){
-      const cap = m.enda * (Math.min(d, 1095) / 365);
-      tiedList.push({code, item: LOOKUP[code].item, cap, days: d});
+    const code = r[0];
+    const metric = collectCodeOptionMetrics(code, mi);
+    if (metric && metric.tiedCap > 0){
+      tiedList.push({code, item: LOOKUP[code].item, cap: metric.tiedCap, days: metric.tiedWeightedDays || metric.weightedDays});
     }
   }
   tiedList.sort((a,b)=>b.cap - a.cap);
@@ -3271,55 +3338,27 @@ function optionLatestUnitCost(o, miMax){
 }
 function optionDaysOfInventory(o, mi){
   const stock = o.endq[mi] || 0;
-  let total = 0, count = 0;
-  for (let k = Math.max(0, mi-2); k <= mi; k++){
-    if (!ACTIVE_MASK[k]) continue;  // 미입력 월 제외
-    total += (o.salq[k]||0) + (o.conq[k]||0);
-    count++;
-  }
-  const avg = count ? total/count : 0;
-  if (!avg) return null;
-  return (stock / avg) * 30;
+  const flow = optionRecentOutflow(o, mi, 3);
+  if (!flow.avg) return null;
+  return (stock / flow.avg) * 30;
 }
 function openDrill(code, mi){
   const tab = DATA.tabs[code]; const meta = LOOKUP[code];
   if (!tab || !meta){ alert('데이터 없음'); return; }
-  const blocks = pickBlocks(code, tab);
-  // 모든 옵션 모으기 (블록 정보 포함)
-  const allOpts = [];
-  for (const b of blocks){
-    for (const o of (b.options||[])){
-      allOpts.push({ o, blockType: b.type, isInternal: isInternalBlockType(b.type) });
-    }
-  }
+  const metric = collectCodeOptionMetrics(code, mi);
   // 코드 전체 metrics
   const codeM = codeMonth(code, mi);
   const codeDays = codeDaysOfInventory(code, mi);
   const codeStockA = codeM ? codeM.enda : 0;
   const codeStockQ = codeM ? codeM.endq : 0;
-  // 각 옵션의 metrics 계산
-  const optRows = allOpts.map(({o, blockType, isInternal})=>{
-    const stockQ = o.endq[mi]||0;
-    const stockA = o.enda[mi]||0;
-    const days = optionDaysOfInventory(o, mi);
-    const tiedCap = (days !== null && stockA > 0) ? stockA * (Math.min(days, 1095)/365) : 0;
-    // 이 옵션 제외 시 코드 회전: (코드재고 - 이 옵션 재고) / 코드 평균출고 × 30
-    // 코드 평균출고는 이 옵션이 빠져도 동일 (옵션만 빠지는 게 아니라 전체 코드 출고 기준)
-    let recalcDays = null;
-    if (codeStockQ - stockQ > 0){
-      let avgOut = 0, c = 0;
-      for (let k = Math.max(0, mi-2); k <= mi; k++){
-        if (!ACTIVE_MASK[k]) continue;
-        const cm = codeMonth(code, k);
-        if (cm){ avgOut += (cm.salq||0) + (cm.conq||0); c++; }
-      }
-      const cAvg = c ? avgOut/c : 0;
-      if (cAvg > 0) recalcDays = ((codeStockQ - stockQ) / cAvg) * 30;
-    }
-    // 옵션 자체 출고가 있는지 (미입력 월 제외)
-    let optOut = 0;
-    for (let k = Math.max(0, mi-2); k <= mi; k++){ if (ACTIVE_MASK[k]) optOut += (o.salq[k]||0)+(o.conq[k]||0); }
-    return { name: o.n, blockType, isInternal, stockQ, stockA, days, tiedCap, recalcDays, optOut };
+  const codeAvg = codeAvgOutflow(code, mi, 3);
+  // 각 옵션의 metrics 계산: 옵션 평균 출고를 기준으로 자본묶임 판단
+  const optRows = (metric ? metric.options : []).map(r=>{
+    const remainingStockQ = codeStockQ - r.stockQ;
+    const clearanceDays = codeAvg > 0 && remainingStockQ > 0 ? (remainingStockQ / codeAvg) * 30 : null;
+    const remainingAvg = codeAvg - (r.avgOut || 0);
+    const remainderDays = remainingAvg > 0 && remainingStockQ > 0 ? (remainingStockQ / remainingAvg) * 30 : null;
+    return { ...r, recalcDays: clearanceDays, remainderDays, optOut: r.recentOut };
   });
   // 정체 기여도 순 정렬 (자본묶임 큰 순)
   optRows.sort((a,b)=>b.tiedCap - a.tiedCap);
@@ -3329,29 +3368,34 @@ function openDrill(code, mi){
       <div><div style="font-size:10px; color:var(--muted)">코드</div><div style="font-size:16px; font-weight:700">${code} · ${meta.item}</div></div>
       <div><div style="font-size:10px; color:var(--muted)">카테고리</div><div>${meta.category}</div></div>
       <div><div style="font-size:10px; color:var(--muted)">코드 전체 재고</div><div style="font-size:14px; font-weight:600">${fmt(codeStockQ)}개 · ${wonShort(codeStockA)}</div></div>
-      <div><div style="font-size:10px; color:var(--muted)">코드 전체 회전</div><div style="font-size:14px; font-weight:600">${daysCappedText(codeDays)}</div></div>
+      <div><div style="font-size:10px; color:var(--muted)">코드 전체 회전(참고)</div><div style="font-size:14px; font-weight:600">${daysCappedText(codeDays)}</div></div>
+      <div><div style="font-size:10px; color:var(--muted)">옵션 기준 회전</div><div style="font-size:14px; font-weight:600">${daysCappedText(metric?.weightedDays)}</div></div>
     </div>
-    <div style="margin-bottom:10px; font-size:11px; color:var(--muted)">옵션을 클릭하면 "이 옵션을 빼면 코드 회전이 어떻게 변하는지" 시뮬레이션이 표시됩니다.</div>
+    <div style="margin-bottom:10px; font-size:11px; color:var(--muted)">자본묶임은 옵션별 최근 3개월 평균 출고로 계산합니다. 옵션을 클릭하면 재고 정리 효과와 해당 옵션을 제외한 나머지 회전을 함께 봅니다.</div>
+    <div id="drillSimResult" style="display:none; margin-bottom:14px; padding:16px; background:linear-gradient(135deg,#eff6ff 0%,#dbeafe 100%); border-left:4px solid #3a6df0; border-radius:8px; font-size:13px;"></div>
     <table style="font-size:12px">
       <thead><tr>
         <th>옵션</th>
         <th>구분</th>
         <th class="num">재고 수량</th>
         <th class="num">재고금액</th>
-        <th class="num">회전일수</th>
+        <th class="num">옵션 회전</th>
         <th class="num">자본묶임</th>
         <th class="num">정체 기여도</th>
-        <th class="num">이 옵션 제외 시 코드 회전</th>
+        <th class="num">재고 정리 시</th>
+        <th class="num">옵션 제외 나머지</th>
       </tr></thead><tbody>
   `;
   const totTied = optRows.reduce((s,r)=>s+r.tiedCap, 0);
-  // 시뮬레이션 결과 카드 (옵션 클릭 시 표시될 영역)
-  html += `<div id="drillSimResult" style="display:none; margin-bottom:14px; padding:16px; background:linear-gradient(135deg,#eff6ff 0%,#dbeafe 100%); border-left:4px solid #3a6df0; border-radius:8px; font-size:13px;"></div>`;
+  // 시뮬레이션 결과 카드는 표 위에 배치하고, 옵션 클릭 시 표시한다.
   optRows.forEach((r, idx)=>{
     const contribPct = totTied ? (r.tiedCap/totTied*100) : 0;
     const contribBar = `<div style="display:flex; align-items:center; gap:4px"><div style="width:50px; height:6px; background:#f3f4f6; border-radius:3px; overflow:hidden"><div style="height:100%; width:${contribPct.toFixed(0)}%; background:${contribPct>40?'#dc2626':contribPct>20?'#fb923c':'#86efac'}"></div></div><span style="font-size:10px; min-width:32px">${contribPct.toFixed(0)}%</span></div>`;
     const recalcCmp = (r.recalcDays !== null && codeDays !== null)
-      ? `<strong>${daysCappedText(r.recalcDays)}</strong> <span style="font-size:10px; color:${r.recalcDays < codeDays * 0.7 ? '#22c55e' : 'var(--muted)'}">${r.recalcDays < codeDays * 0.7 ? '⤓ 크게 개선' : '비슷'}</span>`
+      ? `<strong>${daysCappedText(r.recalcDays)}</strong> <span style="font-size:10px; color:${r.recalcDays < codeDays * 0.7 ? '#22c55e' : 'var(--muted)'}">${r.recalcDays < codeDays * 0.7 ? '재고 정리 효과' : '비슷'}</span>`
+      : '—';
+    const remainderCmp = (r.remainderDays !== null)
+      ? `<strong>${daysCappedText(r.remainderDays)}</strong>`
       : '—';
     const blockBadge = r.isInternal ? '<span class="raw-pill">🧱</span>' : '<span class="com-pill">📦</span>';
     html += `<tr class="opt-cell-clickable" data-opt-idx="${idx}" title="클릭하면 이 옵션을 빼면 코드가 어떻게 달라지는지 시뮬레이션">
@@ -3363,6 +3407,7 @@ function openDrill(code, mi){
       <td class="num">${r.tiedCap > 0 ? wonShort(r.tiedCap) : '—'}</td>
       <td class="num">${contribBar}</td>
       <td class="num">${recalcCmp}</td>
+      <td class="num">${remainderCmp}</td>
     </tr>`;
   });
   html += '</tbody></table>';
@@ -3396,24 +3441,25 @@ function openDrill(code, mi){
       // 시뮬레이션 결과 카드 채우기
       const codeDaysDisplay = daysCappedText(codeDays);
       const recalcDisplay = r.recalcDays !== null ? daysCappedText(r.recalcDays) : '계산 불가';
+      const remainderDisplay = r.remainderDays !== null ? daysCappedText(r.remainderDays) : '계산 불가';
       let verdict, improvement, savedCap;
       if (codeDays === null){
         verdict = `<span style="color:#6b7280">코드 회전 측정 불가 (출고 없음). 옵션 단위 분석만 참고.</span>`;
       } else if (r.recalcDays === null){
-        verdict = `<strong style="color:#991b1b">이 옵션만 빼면 코드 재고가 0이 됨</strong> — 이 옵션이 코드 전체 재고를 좌우`;
+        verdict = `<strong style="color:#991b1b">이 옵션 재고가 코드 대부분을 차지</strong> — 재고 정리 효과는 크지만 나머지 회전은 별도 확인 필요`;
       } else {
         const diff = codeDays - r.recalcDays;
         const pct = (diff/codeDays)*100;
         savedCap = r.tiedCap;
         if (pct >= 50){
-          verdict = `<strong style="color:#166534">⤓ 크게 개선</strong> — 이 옵션만 처리하면 코드 전체 회전이 <strong>${codeDaysDisplay} → ${recalcDisplay}</strong> (${pct.toFixed(0)}% 개선)`;
-          improvement = `이 옵션이 코드 정체의 주범. <strong>우선 처리 시 자본 ${wonShort(savedCap)} 회수 가능</strong>`;
+          verdict = `<strong style="color:#166534">재고 정리 효과 큼</strong> — 이 옵션 재고를 정리하면 코드 재고 부담이 <strong>${codeDaysDisplay} → ${recalcDisplay}</strong> 수준으로 내려갑니다.`;
+          improvement = `이 옵션을 완전히 제외한 나머지 옵션 회전은 <strong>${remainderDisplay}</strong>입니다. 옵션 자체 묶임 자본 ${wonShort(savedCap)}.`;
         } else if (pct >= 20){
-          verdict = `<strong style="color:#9a3412">일부 개선</strong> — 회전 <strong>${codeDaysDisplay} → ${recalcDisplay}</strong> (${pct.toFixed(0)}% 개선)`;
-          improvement = `유의미한 개선이지만 다른 옵션도 함께 점검 필요. 절감 자본 ${wonShort(savedCap)}`;
+          verdict = `<strong style="color:#9a3412">일부 개선</strong> — 재고 정리 시 코드 회전이 <strong>${codeDaysDisplay} → ${recalcDisplay}</strong> 수준으로 개선됩니다.`;
+          improvement = `이 옵션 제외 후 나머지 옵션 회전은 <strong>${remainderDisplay}</strong>입니다. 다른 정체 옵션도 함께 확인하세요.`;
         } else {
-          verdict = `<span style="color:#6b7280">미미한 개선</span> — 회전 <strong>${codeDaysDisplay} → ${recalcDisplay}</strong> (${pct.toFixed(1)}% 개선)`;
-          improvement = `이 옵션은 코드 전체 정체의 작은 부분. 코드 전체 구조 검토 필요`;
+          verdict = `<span style="color:#6b7280">개별 효과는 작음</span> — 이 옵션 재고를 정리해도 코드 회전은 <strong>${codeDaysDisplay} → ${recalcDisplay}</strong> 수준입니다.`;
+          improvement = `이 옵션 제외 후 나머지 옵션 회전은 <strong>${remainderDisplay}</strong>입니다. 코드 전체 구조 점검이 더 중요합니다.`;
         }
       }
       const contribPct = totTied ? (r.tiedCap/totTied*100) : 0;
@@ -3423,7 +3469,7 @@ function openDrill(code, mi){
       sim.innerHTML = `
         <div style="font-size:11px; color:#1e3a8a; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px">시뮬레이션 결과</div>
         <div style="font-size:16px; font-weight:700; margin-bottom:10px">
-          ${code} <span style="color:#6b7280; font-size:12px; font-weight:400">의</span> <strong style="color:#1e3a8a">"${r.name}"</strong> <span style="color:#6b7280; font-size:11px; font-weight:400">옵션을 제외하면…</span>
+          ${code} <span style="color:#6b7280; font-size:12px; font-weight:400">의</span> <strong style="color:#1e3a8a">"${r.name}"</strong> <span style="color:#6b7280; font-size:11px; font-weight:400">옵션 기준 분석</span>
         </div>
         <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:10px; margin-bottom:10px">
           <div style="background:rgba(255,255,255,0.7); padding:8px 10px; border-radius:6px"><div style="font-size:10px; color:#6b7280">옵션 구분</div><div style="font-size:13px; font-weight:600">${blockLabel} (${r.blockType})</div></div>
@@ -3431,6 +3477,8 @@ function openDrill(code, mi){
           <div style="background:rgba(255,255,255,0.7); padding:8px 10px; border-radius:6px"><div style="font-size:10px; color:#6b7280">이 옵션 회전</div><div style="font-size:13px; font-weight:600">${daysCappedText(r.days)}</div></div>
           <div style="background:rgba(255,255,255,0.7); padding:8px 10px; border-radius:6px"><div style="font-size:10px; color:#6b7280">최근 3개월 출고</div><div style="font-size:13px; font-weight:600">${fmt(outRecent3)}개</div></div>
           <div style="background:rgba(255,255,255,0.7); padding:8px 10px; border-radius:6px"><div style="font-size:10px; color:#6b7280">코드 정체 기여도</div><div style="font-size:13px; font-weight:600">${contribPct.toFixed(0)}%</div></div>
+          <div style="background:rgba(255,255,255,0.7); padding:8px 10px; border-radius:6px"><div style="font-size:10px; color:#6b7280">재고 정리 시 코드 회전</div><div style="font-size:13px; font-weight:600">${recalcDisplay}</div></div>
+          <div style="background:rgba(255,255,255,0.7); padding:8px 10px; border-radius:6px"><div style="font-size:10px; color:#6b7280">옵션 제외 나머지 회전</div><div style="font-size:13px; font-weight:600">${remainderDisplay}</div></div>
         </div>
         <div style="background:#fff; padding:10px 12px; border-radius:6px; line-height:1.6">${verdict}${improvement?'<br/><span style="color:#1e3a8a">'+improvement+'</span>':''}</div>
       `;
@@ -3541,9 +3589,8 @@ function renderMonthlyView(){
       if (sp){ sangA += sp.sang.enda; wonjA += sp.wonj.enda; }
       const d = codeDaysOfInventory(code, mi);
       if (d !== null) daysArr.push(d);
-      if (d !== null && d >= 180 && m.enda > 0){
-        tiedCap += m.enda * (Math.min(d, 1095) / 365);
-      }
+      const optMetric = collectCodeOptionMetrics(code, mi);
+      if (optMetric) tiedCap += optMetric.tiedCap || 0;
     }
     const minOutCodes = stockCodeCount ? Math.max(3, Math.ceil(stockCodeCount * 0.4)) : 0;
     const turnRaw = median(daysArr);
@@ -4242,10 +4289,14 @@ function buildReportData(mi){
     const days = codeDaysOfInventory(code, mi);
     if (days !== null) daysArr.push(days);
     const th = thresholdsFor(meta.category);
-    if (days !== null && days >= 180 && (m.enda || 0) > 0){
-      tiedRows.push({ code, item:meta.item, amount:m.enda || 0, days, cap:(m.enda || 0) * (Math.min(days, 1095) / 365) });
+    const optMetric = collectCodeOptionMetrics(code, mi);
+    if (optMetric && optMetric.tiedCap > 0){
+      tiedRows.push({ code, item:meta.item, amount:m.enda || 0, days:optMetric.tiedWeightedDays || optMetric.weightedDays, cap:optMetric.tiedCap });
     }
-    if (days !== null && days < th.ok && (m.endq || 0) > 0){
+    if (optMetric && optMetric.stockoutOptions.length){
+      const fastest = optMetric.stockoutOptions.slice().sort((a,b)=>a.days-b.days)[0];
+      stockoutRows.push({ code, item:meta.item, qty:optMetric.stockoutOptions.reduce((s,o)=>s+o.stockQ,0), days:fastest.days, normal:th.ok });
+    } else if (days !== null && days < th.ok && (m.endq || 0) > 0){
       stockoutRows.push({ code, item:meta.item, qty:m.endq || 0, days, normal:th.ok });
     }
   }
